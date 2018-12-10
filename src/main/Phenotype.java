@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.util.Random;
 
 public class Phenotype {
@@ -35,11 +36,11 @@ public class Phenotype {
 			ret[i] = transform(rule[i], ulim, llim);
 		}
 		if (rule[0] == 0) {
-			ret[0] = (this.rand.nextDouble() + 0.5) * Math.sin(this.rand.nextGaussian());
+			ret[0] = (this.rand.nextDouble() + 0.5) * sign(this.rand.nextGaussian());
 		}
 		if (isAll(ret, 0, 1, 5)) {
 			for (int i = 1; i < 5; i ++) {
-				ret[i] = (this.rand.nextDouble() + 0.5) * Math.sin(this.rand.nextGaussian());
+				ret[i] = (this.rand.nextDouble() + 0.5) * sign(this.rand.nextGaussian());
 			}
 
 		}
@@ -62,7 +63,7 @@ public class Phenotype {
 	double transform(double gx, double ulim, double llim) {
 		double x = Math.pow(gx, 3);
 		if (Math.abs(x) > ulim) {
-			return Math.sin(x) * ulim;
+			return sign(x) * ulim;
 		}else {
 			if (Math.abs(x) > llim) {
 				return x;
@@ -70,5 +71,9 @@ public class Phenotype {
 				return 0;
 			}
 		}
+	}
+
+	int sign(double a) {
+		return BigInteger.valueOf((int)a).signum();
 	}
 }
