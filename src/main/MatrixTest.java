@@ -55,6 +55,26 @@ class MatrixTest {
 		boolean f = assertEual2DArray(Matrix.tanh(m1), expected);
 		assertTrue(f);
 	}
+
+	@Test
+	void testConcatenate() {
+		double [][] m1 = {{1,2}, {3,4}};
+		double [][] m2 = {{1,2}, {3,4}};
+		double [][] out = Matrix.concatenate(m1, m2, 0);
+		//show2DArray(out);
+		double [][] expected = {{1,2, 1, 2}, {3,4, 3,4}};
+		boolean f = assertEual2DArray(out, expected);
+		assertTrue(f);
+
+		double [][] m3 = {{1,2}, {3,4}};
+		double [][] m4 = {{1,2}, {3,4}};
+		double [][] out2 = Matrix.concatenate(m3, m4, 1);
+		show2DArray(out);
+		double [][] expected2 = {{1,2}, {3,4}, {1,2}, {3,4}};
+		boolean f2 = assertEual2DArray(out2, expected2);
+		assertTrue(f2);
+	}
+
 	boolean assertEual2DArray(double [][] m1, double [][] m2) {
 		int nrow = m1.length;
 		int ncol = m1[0].length;
@@ -66,5 +86,14 @@ class MatrixTest {
 			}
 		}
 		return true;
+	}
+
+	void show2DArray(double [][] m1){
+		for (int i = 0; i < m1.length; i ++) {
+			for (int j = 0; j < m1[0].length; j ++) {
+				System.out.print(m1[i][j] + " ");
+			}
+			System.out.println();
+		}
 	}
 }

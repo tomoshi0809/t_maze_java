@@ -61,4 +61,43 @@ public class Matrix {
 		}
 		return ret;
 	}
+
+	public static double [][] concatenate(double [][] m1, double [][] m2, int axis) {
+		if (axis == 0) {
+			int ncol = m1[0].length + m2[0].length;
+			int nrow = m1.length;
+			if (m1.length != m2.length) {
+				System.err.println("Matrix - m1.length != m2.length in concanate");
+			}
+			double [][] ret = new double[nrow][ncol];
+			for (int i = 0; i < nrow; i++) {
+				for (int j = 0; j < m1[0].length; j ++) {
+					ret[i][j] = m1[i][j];
+				}
+				for (int j = m1[0].length; j < ncol; j ++) {
+					ret[i][j] = m2[i][j - m1[0].length];
+				}
+			}
+			return ret;
+		} else if (axis == 1) {
+			int ncol = m1[0].length;
+			int nrow = m1.length + m2.length;
+			if (m1[0].length != m2[0].length) {
+				System.err.println("Matrix - m1[0].length != m2[0].length in concanate");
+			}
+			double [][] ret = new double[nrow][ncol];
+			for (int i = 0; i < ncol; i++) {
+				for (int j = 0; j < m1.length; j ++) {
+					ret[j][i] = m1[j][i];
+				}
+				for (int j = m1.length; j < nrow; j ++) {
+					ret[j][i] = m2[j - m1.length][i];
+				}
+			}
+			return ret;
+		} else {
+			System.err.println("Matrix - concatenate does not suppot the axis:" + axis);
+		}
+		return null;
+	}
 }
