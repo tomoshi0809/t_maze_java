@@ -1,16 +1,16 @@
 
 public class Animat extends Phenotype {
-	double [] state;
+	double [][] state;
 	boolean plastic;
 
 	Animat (Genotype g){
 		super(g);
-		this.state = new double[this.numNeurons];
+		this.state = new double[this.numNeurons][1];
 		this.plastic = true;
 	}
 
-	double behave(double [] inputs) {
-		return 0;
+	double [][] behave(double [][] inputs) {
+		return Matrix.tanh(Matrix.dot(this.weights, Matrix.concatenate(inputs, this.state, 1)));
 	}
 
 	double [][] learn(double []inputs, double [] output){
