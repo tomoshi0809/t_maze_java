@@ -63,7 +63,14 @@ public class Animat extends Phenotype {
 		return ret;
 	}
 
-	double[] perform(double[] input) {
-		return null;
+	double[][] perform(double[][] inputs) {
+		double [][] outputs = this.behave(inputs);
+		if (this.plastic) {
+			this.weights = this.learn(inputs,  outputs);
+		} else {
+			this.weights = this.weights;
+		}
+		this.state = outputs;
+		return outputs;
 	}
 }
