@@ -32,7 +32,7 @@ abstract public class Maze extends Environment {
 	}
 
 	double thinking(Animat animat, double [][] inputs) {
-		double [][] output;
+		double [][] output = null;
 		for (int i = 0; i < this.numThink; i ++ ) {
 			double [][] a = Matrix.add(inputs, noise());
 			output = animat.perform(a);
