@@ -16,6 +16,7 @@ abstract public class Maze extends Environment {
 	}
 
 	boolean home(Animat animat) {
+
 		return true;
 	}
 
@@ -31,7 +32,7 @@ abstract public class Maze extends Environment {
 		return 0;
 	}
 
-	double thinking(Animat animat, double [][] inputs) {
+	double [][] thinking(Animat animat, double [][] inputs) {
 		double [][] output = null;
 		for (int i = 0; i < this.numThink; i ++ ) {
 			double [][] a = Matrix.add(inputs, noise());
