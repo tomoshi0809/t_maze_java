@@ -15,8 +15,7 @@ public class Animat extends Phenotype {
 
 	double[][] learn(double[][] inputs, double[][] outputs) {
 		double[][] updated_weights = Matrix.add(this.weights, this.delta_weight(inputs, outputs));
-
-		return null;
+		return inspect_weight(updated_weights);
 	}
 
 	double[][] delta_weight(double[][] inputs, double[][] outputs) {
@@ -49,8 +48,19 @@ public class Animat extends Phenotype {
 		return this.rule[0] * this.rule[1] * x * y + this.rule[2] * x + this.rule[3] * y + this.rule[4];
 	}
 
-	double[] inspect_weight(double weight) {
-		return null;
+	double[][] inspect_weight(double [][] weights) {
+		double [][] ret = new double[weights.length][weights[0].length];
+		for (int i = 0; i < weights.length; i ++) {
+			for (int j = 0; j < weights[0].length; j ++) {
+				if (weights[i][j] < 10.0) {
+					ret[i][j] = weights[i][j];
+				} else {
+					double a = weights[i][j];
+					ret[i][j] = 10.0 * (a / Math.abs(a));
+				}
+			}
+		}
+		return ret;
 	}
 
 	double[] perform(double[] input) {

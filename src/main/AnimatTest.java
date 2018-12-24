@@ -46,9 +46,21 @@ class AnimatTest {
 		double [][] expected_delta = Matrix.scalar(4, ones2D(num_neurons, num_inputs + num_neurons));
 		double [][] actual_delta = a.delta_weight(input, output);
 		boolean f = assertEual2DArray(expected_delta, actual_delta);
-		new Util().show2DArray(expected_delta);
-		new Util().show2DArray(actual_delta);
 		assertTrue(f);
+	}
+
+	@Test
+	void testInspect_weight() {
+		Genotype g = new Genotype(5, 2);
+		Animat a = new Animat(g);
+		a.state = zeros(a.numNeurons, 1);
+		a.weights = ones2D(2, 7);
+		int num_inputs = 5;
+		int num_neurons = 2;
+		double [][] input = ones2D(num_neurons, num_inputs + num_neurons);
+		double [][] output = ones2D(num_neurons, num_inputs + num_neurons);
+		a.state = ones(num_neurons, 1);
+		boolean f = assertEual2DArray(a.inspect_weight(input), output);
 	}
 
 	@Test
