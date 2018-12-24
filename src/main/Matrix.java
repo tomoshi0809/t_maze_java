@@ -100,4 +100,12 @@ public class Matrix {
 		}
 		return null;
 	}
+
+	public static double [] slice (double [] array, int start, int end) {
+		double [] ret = new double [Math.min(end, array.length) - start];
+		for (int i = start; i < Math.min(end, array.length); i ++) {
+			ret[i - start] = array[i];
+		}
+		return ret;
+	}
 }
