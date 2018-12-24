@@ -1,6 +1,3 @@
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-
 abstract class Environment {
 	int numInputs;
 	abstract public int evaluate(Phenotype p);
@@ -34,16 +31,20 @@ abstract public class Maze extends Environment {
 		return 0;
 	}
 
-	double thinking(Animat animat, RealMatrix input) {
-		input = input.add(noise(animat));
-		return 0;
+	double thinking(Animat animat, double [][] inputs) {
+		double [][] output;
+		for (int i = 0; i < this.numThink; i ++ ) {
+			double [][] a = Matrix.add(inputs, noise());
+			output = animat.perform(a);
+		}
+		return output;
 	}
 
-	RealMatrix noise(Animat animat) {
-		double [] noise = new double[this.numInputs];
+	double [][] noise() {
+		double [][] noise = new double[this.numInputs][1];
 		for (int i = 0; i < noise.length; i ++){
-			noise[i] = Math.random() * this.noiseStd;
+			noise[i][0] = Math.random() * this.noiseStd;
 		}
-		return MatrixUtils.createRowRealMatrix(noise);
+		return noise;
 	}
 }
