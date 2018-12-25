@@ -40,7 +40,7 @@ abstract public class Maze extends Environment {
 	}
 
 	double junction(Animat animat) {
-		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}};
+		double [][] input = {{0.0}, {1.0}, {0.0}, {0.0}, {1.0}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.print("JN: " + out[0][0]);
