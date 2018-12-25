@@ -16,20 +16,45 @@ abstract public class Maze extends Environment {
 	}
 
 	boolean home(Animat animat) {
-
-		return true;
+		double [][] input = {{1.0}, {0.0}, {0.0}, {0.0}, {1.0}};
+		double [][] out = this.thinking(animat, input);
+		if (this.debug) {
+			System.out.print("MS: " + out[0][0]);
+		}
+		if (Math.abs(out[0][0]) <= 1/3) {
+			return true;
+		}
+		return false;
 	}
 
 	boolean corridor(Animat animat) {
-		return true;
+		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}};
+		double [][] out = this.thinking(animat, input);
+		if (this.debug) {
+			System.out.print("CO: " + out[0][0]);
+		}
+		if (Math.abs(out[0][0]) <= 1/3) {
+			return true;
+		}
+		return false;
 	}
 
-	boolean junction(Animat animat) {
-		return true;
+	double junction(Animat animat) {
+		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}};
+		double [][] out = this.thinking(animat, input);
+		if (this.debug) {
+			System.out.print("JN: " + out[0][0]);
+		}
+		return out[0][0];
 	}
 
-	double maze_end(Animat animat) {
-		return 0;
+	double maze_end(Animat animat, double reward) {
+		double [][] input = {{0.0}, {0.0}, {1.0}, {reward}, {1.0}};
+		double [][] out = this.thinking(animat, input);
+		if (this.debug) {
+			System.out.print("ME: " + out[0][0]);
+		}
+		return out[0][0];
 	}
 
 	double [][] thinking(Animat animat, double [][] inputs) {
