@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 class AnimatTest {
 	@Test
 	void testBehave() {
-
 		Genotype g = new Genotype(5, 2);
 		Animat a = new Animat(g);
 		a.state = zeros(a.numNeurons, 1);
@@ -61,6 +60,11 @@ class AnimatTest {
 		double [][] output = ones2D(num_neurons, num_inputs + num_neurons);
 		a.state = ones(num_neurons, 1);
 		boolean f = assertEual2DArray(a.inspect_weight(input), output);
+	}
+	
+	@Test
+	void testPerform() {
+		
 	}
 
 	@Test

@@ -9,9 +9,12 @@ public class SingleTMaze extends Maze{
 	static double noiseStd = 0.001;
 	static int numThink = 3;
 
-
 	SingleTMaze(){
 		super(SingleTMaze.noiseStd, SingleTMaze.numThink);
+	}
+
+	SingleTMaze(double noiseStd){
+		super(noiseStd, SingleTMaze.numThink);
 	}
 
 	public int evaluate (Phenotype p) {
