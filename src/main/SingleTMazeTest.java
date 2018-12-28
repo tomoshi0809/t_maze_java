@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test;
 
 class Mock extends Animat {
 	int count;
+	int num_think;
 	double out;
 	double [][] cmp;
 	boolean flag;
+	double [] action;
 
 	Mock (Genotype g){
 		super(g);
@@ -14,14 +16,36 @@ class Mock extends Animat {
 		this.out = 0.0;
 		this.cmp = zeros(5, 1);
 		this.flag = false;
+		this.num_think = 3;
+		this.action = new double[9];
+		this.action[0] = 0.0;
+		this.action[1] = 0.0;
+		this.action[2] = 1.0;
+		this.action[3] = 0.0;
+		this.action[4] = 0.0;
+		this.action[5] = 0.0;
+		this.action[6] = -1.0;
+		this.action[7] = 0.0;
+		this.action[8] = 0.0;
 	}
 
+	/*
 	double [][] perform (double [][] inputs){
 		this.count += 1;
 		this.flag = assertEual2DArray(inputs, this.cmp);
 		double [][] tmp = {{this.out}};
 		return Matrix.concatenate(tmp, inputs, 1);
 	}
+	*/
+
+	double [][] perform (double [][] inputs){
+		double [][] ret = new double[1][1];
+		ret[0][0] = this.action[(int)this.count/this.num_think];
+		this.count += 1;
+		this.count = this.count % (this.action.length * this.num_think);
+		return ret;
+	}
+
 
 	double [][] zeros (int len, int axis) {
 		if (axis == 0) {
@@ -57,6 +81,7 @@ class Mock extends Animat {
 }
 
 class SingleTMazeTest {
+	/*
 	@Test
 	void testHome() {
 		SingleTMaze s = new SingleTMaze(0.0);
@@ -142,5 +167,56 @@ class SingleTMazeTest {
 		f = (s.maze_end(animat, 0.0) == 0.0);
 		assertTrue(f);
 		assertFalse(animat.flag);
+	}
+	*/
+	@Test
+	void testTrip() {
+		SingleTMaze m = new SingleTMaze(0.0);
+		Genotype g = new Genotype(5, 2);
+		Mock animat = new Mock(g);
+
+		assertTrue(m.trip(animat, 1.0) == m.max_reward);
+		assertTrue(m.trip(animat, -1.0) == m.min_reward);
+		
+		double min_region = (double)(m.num_trip - m.region) / 2;
+		double max_region = (double)(m.num_trip + m.region) / 2;
+		double min_reward_sum = min_region * m.max_reward + max_region * m.min_reward;
+		double max_reward_sum = min_region * m.min_reward + max_region * m.max_reward;
+
+		double [] array = new double[100];
+		for (int i = 0; i < 100; i ++) {
+			array[i] = m.evaluate(animat);
+		}
+		assertTrue(min(array) >= min_reward_sum);
+		assertTrue(max(array) <= max_reward_sum);
+		
+		int num_trip = 150;
+		int cycle = 50;
+		int region = 20;
+		
+		int [][]array2 = new int[100][2];
+		for (int i = 0; i < 100; i ++) {
+			array2[i] = m.switch_points(num_trip, cycle, region);
+		}
+	}
+
+	double min(double [] array) {
+		double min = array[0];
+		for ( int i = 1; i < array.length; i ++) {
+			if (array[i] < min) {
+				min = array[i];
+			}
+		}
+		return min;
+	}
+
+	double max(double [] array) {
+		double max = array[0];
+		for ( int i = 1; i < array.length; i ++) {
+			if (array[i] > max) {
+				max = array[i];
+			}
+		}
+		return max;
 	}
 }
