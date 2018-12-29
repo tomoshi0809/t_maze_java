@@ -10,5 +10,6 @@ public class Experiment {
 	public static void main(String[] args) {
 		// TODO 自動生成されたメソッド・スタブ
 		EvolutionarySearch es = new EvolutionarySearch(SingleTMaze.class, Phenotype.class, NUM_NEURONS, NUM_POPULATION, NUM_GROUPS);
+		es.run(1000, true);
 	}
 }

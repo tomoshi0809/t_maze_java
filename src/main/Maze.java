@@ -19,9 +19,9 @@ abstract public class Maze extends Environment {
 		double [][] input = {{1.0}, {0.0}, {0.0}, {0.0}, {1.0}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
-			System.out.print("MS: " + out[0][0]);
+			System.out.println("MS: " + out[0][0]);
 		}
-		if (Math.abs(out[0][0]) <= 1/3) {
+		if (Math.abs(out[0][0]) <= (double)1/3) {
 			return true;
 		}
 		return false;
@@ -31,9 +31,9 @@ abstract public class Maze extends Environment {
 		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
-			System.out.print("CO: " + out[0][0]);
+			System.out.println("CO: " + out[0][0]);
 		}
-		if (Math.abs(out[0][0]) <= 1/3) {
+		if (Math.abs(out[0][0]) <= (double)1/3) {
 			return true;
 		}
 		return false;
@@ -43,7 +43,7 @@ abstract public class Maze extends Environment {
 		double [][] input = {{0.0}, {1.0}, {0.0}, {0.0}, {1.0}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
-			System.out.print("JN: " + out[0][0]);
+			System.out.println("JN: " + out[0][0]);
 		}
 		return out[0][0];
 	}
@@ -52,7 +52,7 @@ abstract public class Maze extends Environment {
 		double [][] input = {{0.0}, {0.0}, {1.0}, {reward}, {1.0}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
-			System.out.print("ME: " + out[0][0]);
+			System.out.println("ME: " + out[0][0]);
 		}
 		return out[0][0];
 	}

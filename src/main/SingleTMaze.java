@@ -17,13 +17,20 @@ public class SingleTMaze extends Maze{
 
 	SingleTMaze(){
 		super(SingleTMaze.noiseStd, SingleTMaze.numThink);
+		this.max_reward = MAX_REWARD;
+		this.min_reward = MIN_REWARD;
+		this.penalty = PENALTY;
+		this.num_trip = NUM_TRIP;
+		this.cycle = CYCLE;
+		this.region = REGION;
+
 	}
 
 	SingleTMaze(double noiseStd){
 		super(noiseStd, SingleTMaze.numThink);
-		this.num_trip = 100;
-		this.cycle = 50;
-		this.region = 30;
+		this.num_trip = NUM_TRIP;
+		this.cycle = CYCLE;
+		this.region = REGION;
 	}
 
 	double trip(Animat animat, double target) {
@@ -82,7 +89,8 @@ public class SingleTMaze extends Maze{
 				}
 				target = target;
 			}
-			reward_sum += this.trip((Animat)p, target);
+			Animat a = (Animat)p;
+			reward_sum += this.trip(a, target);
 		}
 		return reward_sum;
 	}

@@ -1,12 +1,14 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 
 class AnimatTest {
 	@Test
 	void testBehave() {
 		Genotype g = new Genotype(5, 2);
-		Animat a = new Animat(g);
+		Animat a = new Animat(g, new Random());
 		a.state = zeros(a.numNeurons, 1);
 		a.weights = ones2D(2, 7);
 		int num_inputs = 5;
@@ -27,7 +29,7 @@ class AnimatTest {
 	@Test
 	void testDelta_weight() {
 		Genotype g = new Genotype(5, 2);
-		Animat a = new Animat(g);
+		Animat a = new Animat(g, new Random());
 		a.state = zeros(a.numNeurons, 1);
 		a.weights = ones2D(2, 7);
 		int num_inputs = 5;
@@ -51,7 +53,7 @@ class AnimatTest {
 	@Test
 	void testInspect_weight() {
 		Genotype g = new Genotype(5, 2);
-		Animat a = new Animat(g);
+		Animat a = new Animat(g, new Random());
 		a.state = zeros(a.numNeurons, 1);
 		a.weights = ones2D(2, 7);
 		int num_inputs = 5;
@@ -61,16 +63,16 @@ class AnimatTest {
 		a.state = ones(num_neurons, 1);
 		boolean f = assertEual2DArray(a.inspect_weight(input), output);
 	}
-	
+
 	@Test
 	void testPerform() {
-		
+
 	}
 
 	@Test
 	void testApply_rule() {
 		Genotype g = new Genotype(5, 2);
-		Animat a = new Animat(g);
+		Animat a = new Animat(g, new Random());
 		a.state = zeros(a.numNeurons, 1);
 		a.weights = ones2D(2, 7);
 		int num_inputs = 5;

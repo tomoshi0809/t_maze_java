@@ -8,12 +8,12 @@ public class Phenotype {
 	double [] rule;
 	Random rand;
 
-	Phenotype(Genotype g){
+	Phenotype(Genotype g, Random r){
 		this.numInputs = g.numInputs;
 		this.numNeurons = g.numNeurons;
 		this.weights = transformWeights(g.weights);
 		this.rule = g.rule;
-		this.rand = new Random();
+		this.rand = r;
 	}
 
 	double [][] transformWeights(double [][] weights) {

@@ -1,10 +1,11 @@
+import java.util.Random;
 
 public class Animat extends Phenotype {
 	double[][] state;
 	boolean plastic;
 
-	Animat(Genotype g) {
-		super(g);
+	Animat(Genotype g, Random r) {
+		super(g, r);
 		this.state = new double[this.numNeurons][1];
 		this.plastic = true;
 	}
@@ -45,7 +46,7 @@ public class Animat extends Phenotype {
 	}
 
 	double apply_rule(double x, double y) {
-		return this.rule[0] * this.rule[1] * x * y + this.rule[2] * x + this.rule[3] * y + this.rule[4];
+		return this.rule[0] * (this.rule[1] * x * y + this.rule[2] * x + this.rule[3] * y + this.rule[4]);
 	}
 
 	double[][] inspect_weight(double [][] weights) {

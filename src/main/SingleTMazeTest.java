@@ -1,6 +1,9 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
+
 
 class Mock extends Animat {
 	int count;
@@ -10,8 +13,8 @@ class Mock extends Animat {
 	boolean flag;
 	double [] action;
 
-	Mock (Genotype g){
-		super(g);
+	Mock (Genotype g, Random r){
+		super(g, r);
 		this.count = 0;
 		this.out = 0.0;
 		this.cmp = zeros(5, 1);
@@ -173,11 +176,11 @@ class SingleTMazeTest {
 	void testTrip() {
 		SingleTMaze m = new SingleTMaze(0.0);
 		Genotype g = new Genotype(5, 2);
-		Mock animat = new Mock(g);
+		Mock animat = new Mock(g, new Random());
 
 		assertTrue(m.trip(animat, 1.0) == m.max_reward);
 		assertTrue(m.trip(animat, -1.0) == m.min_reward);
-		
+
 		double min_region = (double)(m.num_trip - m.region) / 2;
 		double max_region = (double)(m.num_trip + m.region) / 2;
 		double min_reward_sum = min_region * m.max_reward + max_region * m.min_reward;
@@ -189,11 +192,11 @@ class SingleTMazeTest {
 		}
 		assertTrue(min(array) >= min_reward_sum);
 		assertTrue(max(array) <= max_reward_sum);
-		
+
 		int num_trip = 150;
 		int cycle = 50;
 		int region = 20;
-		
+
 		int [][]array2 = new int[100][2];
 		for (int i = 0; i < 100; i ++) {
 			array2[i] = m.switch_points(num_trip, cycle, region);

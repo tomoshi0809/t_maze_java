@@ -58,7 +58,7 @@ public class EvolutionarySearch {
 			}
 			Genotype [] selected = select(this.pop, this.numPops, this.numGroup);
 			Genotype [] crossovered = crossover(selected, CROSS_RATE);
-			this.pop = mutate(crossovered, MUTATE_RATE, SIGMA);
+			this.pop = cleanFitness(mutate(crossovered, MUTATE_RATE, SIGMA));
 		}
 	}
 
@@ -66,7 +66,7 @@ public class EvolutionarySearch {
 		for (Genotype g : pop) {
 			double sum = 0;
 			for (int i = 0; i < numEval; i ++) {
-				sum += this.env.evaluate(new Animat(g, this.rand));
+				sum +=  this.env.evaluate(new Animat(g, this.rand));
 			}
 			g.fitness = sum / numEval;
 		}
@@ -123,6 +123,13 @@ public class EvolutionarySearch {
 		Genotype best = getBest(pop);
 		for (int index = 0; index < pop.length; index ++) {
 			pop[index] = Genotype.mutateGenotype(pop[index], mRate, sigma, this.rand);
+		}
+		return pop;
+	}
+
+	Genotype[] cleanFitness(Genotype[] pop) {
+		for (int index = 0; index < pop.length; index ++) {
+			pop[index].fitness = 0;
 		}
 		return pop;
 	}

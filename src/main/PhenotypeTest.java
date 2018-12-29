@@ -1,6 +1,7 @@
 
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ class PhenotypeTest {
 	@Test
 	void testIsAll() {
 		Genotype g = new Genotype(5, 2);
-		Phenotype ph = new Phenotype(g);
+		Phenotype ph = new Phenotype(g, new Random());
 		double [] array1 = {0, 0, 0, 0, 0};
 		double [] array2 = {1, 0, 0, 0, 0};
 		double [] array3 = {1, 1, 1, 1, 1};
@@ -21,7 +22,7 @@ class PhenotypeTest {
 	@Test
 	void testTransform() {
 		Genotype g = new Genotype(5, 2);
-		Phenotype ph = new Phenotype(g);
+		Phenotype ph = new Phenotype(g, new Random());
 		assertEquals(ph.transform(2.0, 10.0, 0.01), 8.0);
 		assertEquals(ph.transform(3.0, 10.0, 0.01), 10.0);
 		assertEquals(ph.transform(-2.0, 10.0, 0.01), -8.0);
