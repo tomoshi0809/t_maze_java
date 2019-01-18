@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class FileReadWriter {
 	final int WRITE_CYCLE = 10;
-	final String WRITE_FILENAME = "/tmp/tmp.txt";
+	final String WRITE_FILENAME = "/tmp/tmp3.txt";
 	File wfile;
 	Genotype [][] store;
 	
@@ -25,7 +25,7 @@ public class FileReadWriter {
 	
 	void writeFile(int generation, Genotype [] store) {
 		try {
-			FileWriter filewriter = new FileWriter(this.wfile);
+			FileWriter filewriter = new FileWriter(this.wfile, true);
 			writeGeneration(filewriter, generation, store);
 			filewriter.close();
 		} catch(IOException e) {

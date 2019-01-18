@@ -29,7 +29,6 @@ public class EvolutionarySearch {
 			System.err.println(e);
 			System.exit(0);
 		}
-		this.pheCls = pheCls;
 		this.numInputs = env.numInputs;
 		this.numNeurons = numNeurons;
 		this.numPops = numPops;
@@ -38,7 +37,7 @@ public class EvolutionarySearch {
 		for (int i = 0; i < numPops; i++) {
 			this.pop[i] = new Genotype(numInputs, numNeurons);
 		}
-		this.numEval = 2;
+		this.numEval = 5;
 		this.envCls = envCls;
 		this.pheCls = pheCls;
 		this.rand = new Random();

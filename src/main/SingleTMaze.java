@@ -1,12 +1,12 @@
 
 public class SingleTMaze extends Maze{
 	final double MAX_REWARD =  1.0;
-	final double MIN_REWARD =  0.2;
-	final double PENALTY    = -0.3;
+	final double MIN_REWARD =  0.1;
+	final double PENALTY    = -0.5;
 	final int NUM_TRIP = 100;
-	final int CYCLE = 50;
-	final int REGION =  30;
-	static double noiseStd = 0.001;
+	final int CYCLE = 10;
+	final int REGION =  3;
+	static double noiseStd = 0.005;
 	static int numThink = 3;
 	double max_reward;
 	double min_reward;
