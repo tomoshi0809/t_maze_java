@@ -100,9 +100,14 @@ public class EvolutionarySearch {
 		for (int i = 0; i < pop.length; i++) {
 			fits[i] = pop[i].fitness;
 		}
+		Genotype best = getBest(pop);
+		double [] data = best.data.getData();
+		double aveRewRight = data[0];
+		double aveRewLeft = data[1];
+		
 		StandardDeviation std = new StandardDeviation(false);
 		double[] ret = { StatUtils.mean(fits), StatUtils.percentile(fits, 50), std.evaluate(fits),
-				StatUtils.max(fits), StatUtils.min(fits) };
+				StatUtils.max(fits), StatUtils.min(fits), aveRewRight, aveRewLeft};
 		return ret;
 	}
 

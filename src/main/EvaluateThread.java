@@ -17,7 +17,9 @@ public class EvaluateThread extends Thread {
 		for (Genotype g : this.unit) {
 			double sum = 0;
 			for (int i = 0; i < numEval; i ++) {
-				sum +=  this.env.evaluate(new Animat(g, this.rand));
+				EvalResult er = this.env.evaluate(new Animat(g, this.rand));
+				sum +=  er.reward;
+				g.data = er.data;
 			}
 			g.fitness = sum / numEval;
 		}

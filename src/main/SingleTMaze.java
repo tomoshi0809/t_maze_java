@@ -75,12 +75,13 @@ public class SingleTMaze extends Maze{
 		return reward;
 	}
 
-	double evaluate (Phenotype p) {
+	EvalResult evaluate (Phenotype p) {
 		int [] sw = this.switch_points(this.num_trip, this.cycle, this.region);
 		double tmp =  Math.random() - 0.5;
 		int target = (int)(Math.abs(tmp)/tmp);
 
 		double reward_sum = 0.0;
+		Data d = new Data();
 		for (int i = 0; i < this.num_trip; i ++) {
 			for (int j = 0; j < sw.length; j ++) {
 				if (i == sw[j]) {
@@ -90,9 +91,11 @@ public class SingleTMaze extends Maze{
 				target = target;
 			}
 			Animat a = (Animat)p;
-			reward_sum += this.trip(a, target);
+			double reward = this.trip(a, target);
+			d.pushData(target, reward);
+			reward_sum += reward;
 		}
-		return reward_sum;
+		return new EvalResult(reward_sum, d);
 	}
 
 	int [] switch_points(int num_trip, int cycle, int region) {
@@ -103,5 +106,36 @@ public class SingleTMaze extends Maze{
 			ret[i] = tmp + (int)(Math.random() * region - region / 2);
 		}
 		return ret;
+	}
+	
+	boolean isStraight (double output) {
+		if (output <= (double)-1/3) {
+			return true;
+		}
+		return false;
+	}
+	
+	boolean isTurnRight (double output) {
+		if (output >= (double)1/3) {
+			return true;
+		}
+		return false;
+	}
+	
+	boolean isTurnLeft (double output) {
+		if (Math.abs(output) < (double)1/3) {
+			return true;
+		}
+		return false;
+	}
+}
+
+class EvalResult {
+	double reward;
+	Data data;
+	
+	EvalResult (double reward, Data data) {
+		this.reward = reward;
+		this.data = data;
 	}
 }

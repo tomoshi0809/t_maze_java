@@ -172,6 +172,7 @@ class SingleTMazeTest {
 		assertFalse(animat.flag);
 	}
 	*/
+	/*
 	@Test
 	void testTrip() {
 		SingleTMaze m = new SingleTMaze(0.0);
@@ -202,6 +203,7 @@ class SingleTMazeTest {
 			array2[i] = m.switch_points(num_trip, cycle, region);
 		}
 	}
+	*/
 
 	double min(double [] array) {
 		double min = array[0];

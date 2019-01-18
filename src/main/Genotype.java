@@ -7,6 +7,7 @@ public class Genotype {
 	double [][]weights;
 	double []rule;
 	double fitness;
+	Data data;
 
 	Genotype(){}
 
