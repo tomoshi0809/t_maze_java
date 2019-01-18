@@ -97,17 +97,18 @@ public class EvolutionarySearch {
 
 	double[] fitStats(Genotype[] pop) {
 		double[] fits = new double[pop.length];
+		double[] rewRight = new double[pop.length];
+		double[] rewLeft = new double[pop.length];
 		for (int i = 0; i < pop.length; i++) {
 			fits[i] = pop[i].fitness;
+			double [] data = pop[i].data.getData();
+			rewRight[i] = data[0];
+			rewLeft[i] = data[1];
 		}
-		Genotype best = getBest(pop);
-		double [] data = best.data.getData();
-		double aveRewRight = data[0];
-		double aveRewLeft = data[1];
 		
 		StandardDeviation std = new StandardDeviation(false);
 		double[] ret = { StatUtils.mean(fits), StatUtils.percentile(fits, 50), std.evaluate(fits),
-				StatUtils.max(fits), StatUtils.min(fits), aveRewRight, aveRewLeft};
+				StatUtils.max(fits), StatUtils.min(fits), StatUtils.mean(rewRight), StatUtils.mean(rewLeft)};
 		return ret;
 	}
 
