@@ -26,10 +26,13 @@ public class Data {
 		}
 	}
 	
-	double [] getData () {
-		this.aveRewRight = (double) this.rewRight / this.countTrialRight;
+	double getAveRewLeft () {
 		this.aveRewLeft = (double) this.rewLeft / this.countTrialLeft;
-		double [] ret = {this.aveRewRight, this.aveRewLeft};
-		return ret;
+		return this.aveRewLeft;
+	}
+	
+	double getAveRewRight() {
+		this.aveRewRight = (double) this.rewRight / this.countTrialRight;
+		return this.aveRewRight;
 	}
 }

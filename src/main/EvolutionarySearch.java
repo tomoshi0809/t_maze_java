@@ -19,6 +19,7 @@ public class EvolutionarySearch {
 	Class envCls;
 	Class pheCls;
 	Random rand;
+	FileReadWriter frw;
 
 	EvolutionarySearch(Class envCls, Class pheCls, int numNeurons, int numPops, int numGroup) {
 		try {
@@ -41,20 +42,25 @@ public class EvolutionarySearch {
 		this.envCls = envCls;
 		this.pheCls = pheCls;
 		this.rand = new Random();
+		this.frw = new FileReadWriter();
 	}
 
-	public void run(int numGenerations, boolean printStats) {
-		for (int i = 0; i < numGenerations; i++) {
+	public void run(int numGenerations, boolean isPrintStats, boolean isWriteFile) {
+		for (int generation = 0; generation < numGenerations; generation++) {
 			evaluate(this.pop, this.numEval);
-			if (printStats) {
+			if (isPrintStats) {
 				double[] stats = fitStats(this.pop);
-				System.out.print(i + ", ");
+				System.out.print(generation + ", ");
 				for (int j = 0; j < stats.length; j++) {
 					System.out.print(stats[j] + ", ");
 				}
 				System.out.println();
 			}
-			if (i == numGenerations - 1) {
+			
+			if (isWriteFile) {
+				this.frw.putGenoType(generation, this.pop);
+			}
+			if (generation == numGenerations - 1) {
 				break;
 			}
 			Genotype [] selected = select(this.pop, this.numPops, this.numGroup);
@@ -102,9 +108,8 @@ public class EvolutionarySearch {
 		double[] rewLeft = new double[pop.length];
 		for (int i = 0; i < pop.length; i++) {
 			fits[i] = pop[i].fitness;
-			double [] data = pop[i].data.getData();
-			rewRight[i] = data[0];
-			rewLeft[i] = data[1];
+			rewRight[i] = pop[i].data.getAveRewRight();
+			rewLeft[i] = pop[i].data.getAveRewLeft();
 			for (int index = 0; index < 5; index ++) {
 				rules[index][i] = pop[i].rule[index];
 			}
