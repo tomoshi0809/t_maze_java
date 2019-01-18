@@ -7,6 +7,7 @@ public class EvolutionarySearch {
 	final double CROSS_RATE = 0.1;
 	final double MUTATE_RATE = 0.1;
 	final double SIGMA = 0.3;
+	final int NUM_THREAD = 6;
 	Environment env;
 	Phenotype p;
 	int numInputs;
@@ -63,12 +64,34 @@ public class EvolutionarySearch {
 	}
 
 	void evaluate(Genotype[] pop, int numEval) {
-		for (Genotype g : pop) {
-			double sum = 0;
-			for (int i = 0; i < numEval; i ++) {
-				sum +=  this.env.evaluate(new Animat(g, this.rand));
+		int npop = pop.length;
+		int nperthread = npop / NUM_THREAD;
+		int thidx = 0;
+		
+		Thread [] th = new Thread[NUM_THREAD];
+		
+		while (thidx < NUM_THREAD) {
+			int start = nperthread * thidx;
+			int end = nperthread * (thidx + 1);
+			if (thidx == NUM_THREAD - 1) {
+				end = npop;
 			}
-			g.fitness = sum / numEval;
+			Genotype [] unit = new Genotype[end - start];
+			for (int i = 0; i < (end - start); i ++) {
+				unit[i] = pop[start + i];
+			}
+			th [thidx] = new EvaluateThread(this.env, unit, this.numEval, this.rand);
+			th[thidx].start();
+			thidx ++;
+		}
+		
+		for (thidx = 0; thidx < NUM_THREAD; thidx ++) {
+			try {	
+				th[thidx].join();
+			} catch (InterruptedException e) {
+				System.err.println(e);
+				System.exit(1);
+			}
 		}
 	}
 
