@@ -6,7 +6,7 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 public class EvolutionarySearch {
 	final double CROSS_RATE = 0.1;
 	final double MUTATE_RATE = 0.1;
-	final double SIGMA = 0.3;
+	final double SIGMA = 0.2;
 	final int NUM_THREAD = 6;
 	Environment env;
 	Phenotype p;
@@ -55,7 +55,7 @@ public class EvolutionarySearch {
 				}
 				System.out.println();
 			}
-			
+
 			if (isWriteFile) {
 				this.frw.putGenoType(generation, this.pop);
 			}
@@ -72,9 +72,9 @@ public class EvolutionarySearch {
 		int npop = pop.length;
 		int nperthread = npop / NUM_THREAD;
 		int thidx = 0;
-		
+
 		Thread [] th = new Thread[NUM_THREAD];
-		
+
 		while (thidx < NUM_THREAD) {
 			int start = nperthread * thidx;
 			int end = nperthread * (thidx + 1);
@@ -89,9 +89,9 @@ public class EvolutionarySearch {
 			th[thidx].start();
 			thidx ++;
 		}
-		
+
 		for (thidx = 0; thidx < NUM_THREAD; thidx ++) {
-			try {	
+			try {
 				th[thidx].join();
 			} catch (InterruptedException e) {
 				System.err.println(e);
@@ -113,10 +113,10 @@ public class EvolutionarySearch {
 				rules[index][i] = pop[i].rule[index];
 			}
 		}
-		
+
 		StandardDeviation std = new StandardDeviation(false);
 		double[] ret = { StatUtils.mean(fits), StatUtils.percentile(fits, 50), std.evaluate(fits),
-				StatUtils.max(fits), StatUtils.min(fits), StatUtils.mean(rewRight), StatUtils.mean(rewLeft), 
+				StatUtils.max(fits), StatUtils.min(fits), StatUtils.mean(rewRight), StatUtils.mean(rewLeft),
 				StatUtils.mean(rules[0]), StatUtils.mean(rules[1]), StatUtils.mean(rules[2]),StatUtils.mean(rules[3]),StatUtils.mean(rules[4])};
 		return ret;
 	}

@@ -33,21 +33,21 @@ public class SingleTMaze extends Maze{
 		this.region = REGION;
 	}
 
-	double trip(Animat animat, double target) {
+	double trip(Animat animat, double target, boolean can_look) {
 		if (!this.home(animat)) {
 			return this.penalty;
 		}
 
-		if (!this.corridor(animat)) {
+		if (!this.corridor(animat, can_look)) {
 			return this.penalty;
 		}
 
-		double turn1 = this.junction(animat);
+		double turn1 = this.junction(animat, can_look);
 		if (Math.abs(turn1) < (double)1/3) {
 			return this.penalty;
 		}
 
-		if (!this.corridor(animat)) {
+		if (!this.corridor(animat, can_look)) {
 			return this.penalty;
 		}
 
@@ -59,16 +59,16 @@ public class SingleTMaze extends Maze{
 		}
 		this.maze_end(animat, reward);
 
-		if (!this.corridor(animat)) {
+		if (!this.corridor(animat, can_look)) {
 			return reward + this.penalty;
 		}
 
-		double turn2 = this.junction(animat);
+		double turn2 = this.junction(animat, can_look);
 		if (Math.abs(turn2) < (double)1/3 || (Math.abs(turn2)/turn2) == (Math.abs(turn1)/turn1)) {
 			return reward + this.penalty;
 		}
 
-		if (!this.corridor(animat)) {
+		if (!this.corridor(animat, can_look)) {
 			return reward + this.penalty;
 		}
 		this.home(animat);
@@ -79,11 +79,16 @@ public class SingleTMaze extends Maze{
 		int [] sw = this.switch_points(this.num_trip, this.cycle, this.region);
 		double tmp =  Math.random() - 0.5;
 		int target = (int)(Math.abs(tmp)/tmp);
+		boolean can_look = true;
+		int learn_duration = sw [(int)(sw.length / 2)];
 
 		double reward_sum = 0.0;
 		Data d = new Data();
 		for (int i = 0; i < this.num_trip; i ++) {
 			for (int j = 0; j < sw.length; j ++) {
+				if (i == learn_duration) {
+					can_look = false;
+				}
 				if (i == sw[j]) {
 					target = target * -1;
 					break;
@@ -91,7 +96,7 @@ public class SingleTMaze extends Maze{
 				target = target;
 			}
 			Animat a = (Animat)p;
-			double reward = this.trip(a, target);
+			double reward = this.trip(a, target, can_look);
 			d.pushData(target, reward);
 			reward_sum += reward;
 		}
@@ -107,21 +112,21 @@ public class SingleTMaze extends Maze{
 		}
 		return ret;
 	}
-	
+
 	boolean isStraight (double output) {
 		if (output <= (double)-1/3) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	boolean isTurnRight (double output) {
 		if (output >= (double)1/3) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	boolean isTurnLeft (double output) {
 		if (Math.abs(output) < (double)1/3) {
 			return true;
@@ -133,7 +138,7 @@ public class SingleTMaze extends Maze{
 class EvalResult {
 	double reward;
 	Data data;
-	
+
 	EvalResult (double reward, Data data) {
 		this.reward = reward;
 		this.data = data;

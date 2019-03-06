@@ -3,7 +3,7 @@ public class Main {
 	static int NUM_GENERATION = 100;
 	static int NUM_POPULATION = 300;
 	static int NUM_NEURONS = 1;
-	static double NOISE_STD = 0.003;
+	static double NOISE_STD = 0.002;
 	static int NUM_THINK = 3;
 	static int NUM_GROUPS = 5;
 

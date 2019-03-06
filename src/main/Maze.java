@@ -27,7 +27,7 @@ abstract public class Maze extends Environment {
 		return false;
 	}
 
-	boolean corridor(Animat animat) {
+	boolean corridor(Animat animat, boolean can_look) {
 		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
@@ -39,8 +39,11 @@ abstract public class Maze extends Environment {
 		return false;
 	}
 
-	double junction(Animat animat) {
+	double junction(Animat animat, boolean can_look) {
 		double [][] input = {{0.0}, {1.0}, {0.0}, {0.0}, {1.0}};
+		if (!can_look) {
+			input[1][0] = 0.0;
+		}
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("JN: " + out[0][0]);
