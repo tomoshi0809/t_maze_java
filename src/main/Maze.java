@@ -9,14 +9,17 @@ abstract public class Maze extends Environment {
 	boolean debug;
 
 	Maze (double noiseStd, int numThink) {
-		this.numInputs = 5;
+		this.numInputs = 6;
 		this.numThink = numThink;
 		this.noiseStd = noiseStd;
 		this.debug = false;
 	}
 
-	boolean home(Animat animat) {
-		double [][] input = {{1.0}, {0.0}, {0.0}, {0.0}, {1.0}};
+	boolean home(Animat animat, boolean can_look) {
+		double [][] input = {{1.0}, {0.0}, {0.0}, {0.0}, {1.0}, {0.0}};
+		if (!can_look) {
+			input[5][0] = 1.0;
+		}
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("MS: " + out[0][0]);
@@ -28,7 +31,10 @@ abstract public class Maze extends Environment {
 	}
 
 	boolean corridor(Animat animat, boolean can_look) {
-		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}};
+		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}, {0.0}};
+		if (!can_look) {
+			input[5][0] = 1.0;
+		}
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("CO: " + out[0][0]);
@@ -40,9 +46,10 @@ abstract public class Maze extends Environment {
 	}
 
 	double junction(Animat animat, boolean can_look) {
-		double [][] input = {{0.0}, {1.0}, {0.0}, {0.0}, {1.0}};
+		double [][] input = {{0.0}, {1.0}, {0.0}, {0.0}, {1.0}, {0.0}};
 		if (!can_look) {
 			input[1][0] = 0.0;
+			input[5][0] = 1.0;
 		}
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
@@ -51,8 +58,11 @@ abstract public class Maze extends Environment {
 		return out[0][0];
 	}
 
-	double maze_end(Animat animat, double reward) {
-		double [][] input = {{0.0}, {0.0}, {1.0}, {reward}, {1.0}};
+	double maze_end(Animat animat, double reward, boolean can_look) {
+		double [][] input = {{0.0}, {0.0}, {1.0}, {reward}, {1.0}, {0.0}};
+		if (!can_look) {
+			input[5][0] = 1.0;
+		}
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("ME: " + out[0][0]);

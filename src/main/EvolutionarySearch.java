@@ -7,7 +7,7 @@ public class EvolutionarySearch {
 	final double CROSS_RATE = 0.1;
 	final double MUTATE_RATE = 0.1;
 	final double SIGMA = 0.2;
-	final int NUM_THREAD = 6;
+	final int NUM_THREAD = 10;
 	Environment env;
 	Phenotype p;
 	int numInputs;

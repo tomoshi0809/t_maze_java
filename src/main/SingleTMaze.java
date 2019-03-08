@@ -34,7 +34,7 @@ public class SingleTMaze extends Maze{
 	}
 
 	double trip(Animat animat, double target, boolean can_look) {
-		if (!this.home(animat)) {
+		if (!this.home(animat, can_look)) {
 			return this.penalty;
 		}
 
@@ -57,7 +57,7 @@ public class SingleTMaze extends Maze{
 		} else {
 			reward = this.min_reward;
 		}
-		this.maze_end(animat, reward);
+		this.maze_end(animat, reward, can_look);
 
 		if (!this.corridor(animat, can_look)) {
 			return reward + this.penalty;
@@ -71,7 +71,7 @@ public class SingleTMaze extends Maze{
 		if (!this.corridor(animat, can_look)) {
 			return reward + this.penalty;
 		}
-		this.home(animat);
+		this.home(animat, can_look);
 		return reward;
 	}
 
