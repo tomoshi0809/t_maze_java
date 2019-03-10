@@ -33,77 +33,77 @@ public class SingleTMaze extends Maze{
 		this.region = REGION;
 	}
 
-	double trip(Animat animat, double target, int num_ver_cor, int num_hor_cor, boolean can_look) {
-		if (!this.home(animat, can_look)) {
-			punishment(animat, can_look);
+	double trip(Animat animat, double target, int numVerCor, int numHorCor, boolean canLook) {
+		if (!this.home(animat, canLook)) {
+			punishment(animat, canLook);
 			return this.penalty;
 		}
 
-		for (int i = 0; i < num_ver_cor; i ++) {
-			if (!this.corridor(animat, can_look)) {
-				punishment(animat, can_look);
+		for (int i = 0; i < numVerCor; i ++) {
+			if (!this.corridor(animat, canLook)) {
+				punishment(animat, canLook);
 				return this.penalty;
 			}
 		}
 
-		double turn1 = this.junction(animat, can_look);
+		double turn1 = this.junction(animat, canLook);
 		if (!(turn1 >= (double)1/3)) {
-			punishment(animat, can_look);
+			punishment(animat, canLook);
 			return this.penalty;
 		}
 
-		for (int i = 0; i < num_hor_cor; i ++) {
-			if (!this.corridor(animat, can_look)) {
-				punishment(animat, can_look);
+		for (int i = 0; i < numHorCor; i ++) {
+			if (!this.corridor(animat, canLook)) {
+				punishment(animat, canLook);
 				return this.penalty;
 			}
 		}
-		this.mazeEnd(animat, 1, can_look);
+		this.mazeEnd(animat, 1, canLook);
 
 		double reward = this.MAX_REWARD;
-		for (int i = 0; i < num_hor_cor; i ++) {
-			if (!this.corridor(animat, can_look)) {
-				punishment(animat, can_look);
+		for (int i = 0; i < numHorCor; i ++) {
+			if (!this.corridor(animat, canLook)) {
+				punishment(animat, canLook);
 				return reward + this.penalty;
 			}
 		}
 
-		double turn2 = this.junction(animat, can_look);
+		double turn2 = this.junction(animat, canLook);
 		if (!(turn2 < (double)-1/3)) {
-			punishment(animat, can_look);
+			punishment(animat, canLook);
 			return reward + this.penalty;
 		}
 
-		for (int i = 0; i < num_ver_cor; i ++) {
-			if (!this.corridor(animat, can_look)) {
-				punishment(animat, can_look);
+		for (int i = 0; i < numVerCor; i ++) {
+			if (!this.corridor(animat, canLook)) {
+				punishment(animat, canLook);
 				return reward + this.penalty;
 			}
 		}
-		this.home(animat, can_look);
+		this.home(animat, canLook);
 		return reward;
 	}
 
-	EvalResult evaluate (Phenotype p, int num_ver_cor, int num_hor_cor) {
-		boolean can_look = true;
-		int learn_duration = this.NUM_TRIP / 2;
+	EvalResult evaluate (Phenotype p, int numVerCor, int numHorCor) {
+		boolean canLook = true;
+		int learnDuration = this.NUM_TRIP / 2;
 
-		double reward_sum = 0.0;
+		double rewardSum = 0.0;
 		Data d = new Data();
 		Animat a = (Animat)p;
 		for (int i = 0; i < this.numTrip; i ++) {
-			if (i == learn_duration) {
-				can_look = true;
+			if (i == learnDuration) {
+				canLook = false;
 			}
-			double reward = this.trip(a, 1, num_ver_cor, num_hor_cor, can_look);
+			double reward = this.trip(a, 1, numVerCor, numHorCor, canLook);
 			d.pushData(1, reward);
-			reward_sum += reward;
+			rewardSum += reward;
 		}
-		return new EvalResult(reward_sum, d);
+		return new EvalResult(rewardSum, d);
 	}
 
-	int [] switch_points(int num_trip, int cycle, int region) {
-		int length = num_trip / cycle -1;
+	int [] switchPoints(int numTrip, int cycle, int region) {
+		int length = numTrip / cycle -1;
 		int [] ret = new int[length];
 		for (int i = 0; i < length; i ++ ) {
 			int tmp = cycle * (i + 1);

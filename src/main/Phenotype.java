@@ -35,6 +35,7 @@ public class Phenotype {
 		for (int i = 0; i < rule.length; i ++) {
 			ret[i] = transform(rule[i], ulim, llim);
 		}
+
 		if (rule[0] == 0) {
 			ret[0] = (this.rand.nextDouble() + 0.5) * sign(this.rand.nextGaussian());
 		}

@@ -8,13 +8,14 @@ public class EvaluateThread extends Thread {
 	int numVerCor;
 	int numHorCor;
 
-	EvaluateThread(Environment env, Genotype [] g, int numEval, Random r, int num_ver_cor, int num_hor_cor){
+	EvaluateThread(Environment env, Genotype [] g, int numEval, Random r, int numVerCor, int numHorCor){
 		this.env = env;
 		this.unit = g;
 		this.numEval = numEval;
 		this.rand = r;
-		this.numVerCor = num_ver_cor;
-		this.numHorCor = num_hor_cor;
+
+		this.numVerCor = numVerCor;
+		this.numHorCor = numHorCor;
 	}
 
 	public void run() {
