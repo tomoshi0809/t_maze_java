@@ -45,11 +45,11 @@ public class EvolutionarySearch {
 	}
 
 	public void run(int numGenerations, boolean isPrintStats, boolean isWriteFile) {
-		int [][] num_cors = createNumCors(numGenerations);
+		int [][] numCors = createNumCors(numGenerations);
 		for (int generation = 0; generation < numGenerations; generation++) {
-			int num_ver_cor = num_cors[generation][0];
-			int num_hor_cor = num_cors[generation][1];
-			evaluate(this.pop, this.numEval, num_ver_cor, num_hor_cor);
+			int numVerCor = numCors[generation][0];
+			int numHorCor = numCors[generation][1];
+			evaluate(this.pop, this.numEval, numVerCor, numHorCor);
 			if (isPrintStats) {
 				double[] stats = fitStats(this.pop);
 				System.out.print(generation + ", ");
@@ -80,7 +80,7 @@ public class EvolutionarySearch {
 		return ret;
 	}
 
-	void evaluate(Genotype[] pop, int numEval,  int num_ver_cor, int num_hor_cor) {
+	void evaluate(Genotype[] pop, int numEval,  int numVerCor, int numHorCor) {
 		int npop = pop.length;
 		int nperthread = npop / NUM_THREAD;
 		int thidx = 0;
@@ -97,7 +97,7 @@ public class EvolutionarySearch {
 			for (int i = 0; i < (end - start); i ++) {
 				unit[i] = pop[start + i];
 			}
-			th [thidx] = new EvaluateThread(this.env, unit, this.numEval, this.rand, num_ver_cor, num_hor_cor);
+			th [thidx] = new EvaluateThread(this.env, unit, this.numEval, this.rand, numVerCor, numHorCor);
 			th[thidx].start();
 			thidx ++;
 		}

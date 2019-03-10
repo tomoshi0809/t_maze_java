@@ -8,19 +8,19 @@ public class SingleTMaze extends Maze{
 	final int REGION =  3;
 	static double noiseStd = 0.005;
 	static int numThink = 3;
-	double max_reward;
-	double min_reward;
+	double maxReward;
+	double minReward;
 	double penalty;
-	int num_trip;
+	int numTrip;
 	int cycle;
 	int region;
 
 	SingleTMaze(){
 		super(SingleTMaze.noiseStd, SingleTMaze.numThink);
-		this.max_reward = MAX_REWARD;
-		this.min_reward = MIN_REWARD;
+		this.maxReward = MAX_REWARD;
+		this.minReward = MIN_REWARD;
 		this.penalty = PENALTY;
-		this.num_trip = NUM_TRIP;
+		this.numTrip = NUM_TRIP;
 		this.cycle = CYCLE;
 		this.region = REGION;
 
@@ -28,7 +28,7 @@ public class SingleTMaze extends Maze{
 
 	SingleTMaze(double noiseStd){
 		super(noiseStd, SingleTMaze.numThink);
-		this.num_trip = NUM_TRIP;
+		this.numTrip = NUM_TRIP;
 		this.cycle = CYCLE;
 		this.region = REGION;
 	}
@@ -58,7 +58,7 @@ public class SingleTMaze extends Maze{
 				return this.penalty;
 			}
 		}
-		this.maze_end(animat, 1, can_look);
+		this.mazeEnd(animat, 1, can_look);
 
 		double reward = this.MAX_REWARD;
 		for (int i = 0; i < num_hor_cor; i ++) {
@@ -91,7 +91,7 @@ public class SingleTMaze extends Maze{
 		double reward_sum = 0.0;
 		Data d = new Data();
 		Animat a = (Animat)p;
-		for (int i = 0; i < this.num_trip; i ++) {
+		for (int i = 0; i < this.numTrip; i ++) {
 			if (i == learn_duration) {
 				can_look = true;
 			}

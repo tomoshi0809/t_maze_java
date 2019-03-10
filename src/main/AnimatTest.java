@@ -45,7 +45,7 @@ class AnimatTest {
 		a.rule[4] = 1;
 
 		double [][] expected_delta = Matrix.scalar(4, ones2D(num_neurons, num_inputs + num_neurons));
-		double [][] actual_delta = a.delta_weight(input, output);
+		double [][] actual_delta = a.deltaWeight(input, output);
 		boolean f = assertEual2DArray(expected_delta, actual_delta);
 		assertTrue(f);
 	}
@@ -61,7 +61,7 @@ class AnimatTest {
 		double [][] input = ones2D(num_neurons, num_inputs + num_neurons);
 		double [][] output = ones2D(num_neurons, num_inputs + num_neurons);
 		a.state = ones(num_neurons, 1);
-		boolean f = assertEual2DArray(a.inspect_weight(input), output);
+		boolean f = assertEual2DArray(a.inspectWeight(input), output);
 	}
 
 	@Test
@@ -83,7 +83,7 @@ class AnimatTest {
 		a.rule[2] = 1;
 		a.rule[3] = 1;
 		a.rule[4] = 1;
-		assertTrue(a.apply_rule(3, 4) == 20);
+		assertTrue(a.applyRule(3, 4) == 20);
 	}
 
 	double [][] ones (int len, int axis) {
