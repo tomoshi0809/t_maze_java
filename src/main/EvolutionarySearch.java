@@ -7,7 +7,7 @@ public class EvolutionarySearch {
 	final double CROSS_RATE = 0.1;
 	final double MUTATE_RATE = 0.1;
 	final double SIGMA = 0.2;
-	final int NUM_THREAD = 10;
+	final int NUM_THREAD = 2;
 	Environment env;
 	Phenotype p;
 	int numInputs;
@@ -45,8 +45,11 @@ public class EvolutionarySearch {
 	}
 
 	public void run(int numGenerations, boolean isPrintStats, boolean isWriteFile) {
+		int [][] num_cors = createNumCors(numGenerations);
 		for (int generation = 0; generation < numGenerations; generation++) {
-			evaluate(this.pop, this.numEval);
+			int num_ver_cor = num_cors[generation][0];
+			int num_hor_cor = num_cors[generation][1];
+			evaluate(this.pop, this.numEval, num_ver_cor, num_hor_cor);
 			if (isPrintStats) {
 				double[] stats = fitStats(this.pop);
 				System.out.print(generation + ", ");
@@ -68,7 +71,16 @@ public class EvolutionarySearch {
 		}
 	}
 
-	void evaluate(Genotype[] pop, int numEval) {
+	int [][] createNumCors(int numGeneration){
+		int [][] ret = new int[numGeneration][2];
+		for (int i = 0; i < numGeneration; i ++) {
+			ret[i][0] = 1 + (int)(Math.random() * 2);
+			ret[i][1] = 1 + (int)(Math.random() * 2);
+		}
+		return ret;
+	}
+
+	void evaluate(Genotype[] pop, int numEval,  int num_ver_cor, int num_hor_cor) {
 		int npop = pop.length;
 		int nperthread = npop / NUM_THREAD;
 		int thidx = 0;
@@ -85,7 +97,7 @@ public class EvolutionarySearch {
 			for (int i = 0; i < (end - start); i ++) {
 				unit[i] = pop[start + i];
 			}
-			th [thidx] = new EvaluateThread(this.env, unit, this.numEval, this.rand);
+			th [thidx] = new EvaluateThread(this.env, unit, this.numEval, this.rand, num_ver_cor, num_hor_cor);
 			th[thidx].start();
 			thidx ++;
 		}

@@ -1,6 +1,6 @@
 abstract class Environment {
 	int numInputs;
-	abstract EvalResult evaluate(Phenotype p);
+	abstract EvalResult evaluate(Phenotype p, int v, int h);
 }
 
 abstract public class Maze extends Environment {

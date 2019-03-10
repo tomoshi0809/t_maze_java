@@ -33,78 +33,70 @@ public class SingleTMaze extends Maze{
 		this.region = REGION;
 	}
 
-	double trip(Animat animat, double target, boolean can_look) {
+	double trip(Animat animat, double target, int num_ver_cor, int num_hor_cor, boolean can_look) {
 		if (!this.home(animat, can_look)) {
 			punishment(animat, can_look);
 			return this.penalty;
 		}
 
-		if (!this.corridor(animat, can_look)) {
-			punishment(animat, can_look);
-			return this.penalty;
+		for (int i = 0; i < num_ver_cor; i ++) {
+			if (!this.corridor(animat, can_look)) {
+				punishment(animat, can_look);
+				return this.penalty;
+			}
 		}
 
 		double turn1 = this.junction(animat, can_look);
-		if (!(0 <= turn1 && turn1 < (double)1/3)) {
+		if (!(turn1 >= (double)1/3)) {
 			punishment(animat, can_look);
 			return this.penalty;
 		}
 
-		if (!this.corridor(animat, can_look)) {
-			punishment(animat, can_look);
-			return this.penalty;
+		for (int i = 0; i < num_hor_cor; i ++) {
+			if (!this.corridor(animat, can_look)) {
+				punishment(animat, can_look);
+				return this.penalty;
+			}
 		}
+		this.maze_end(animat, 1, can_look);
 
-		double reward;
-		if (Math.abs(turn1)/turn1 == target) {
-			reward = this.max_reward;
-		} else {
-			reward = this.min_reward;
-		}
-		this.maze_end(animat, reward, can_look);
-
-		if (!this.corridor(animat, can_look)) {
-			punishment(animat, can_look);
-			return reward + this.penalty;
+		double reward = this.MAX_REWARD;
+		for (int i = 0; i < num_hor_cor; i ++) {
+			if (!this.corridor(animat, can_look)) {
+				punishment(animat, can_look);
+				return reward + this.penalty;
+			}
 		}
 
 		double turn2 = this.junction(animat, can_look);
-		if (!(turn2 < 0 && turn2 >= (double)-1/3)) {
+		if (!(turn2 < (double)-1/3)) {
 			punishment(animat, can_look);
 			return reward + this.penalty;
 		}
 
-		if (!this.corridor(animat, can_look)) {
-			punishment(animat, can_look);
-			return reward + this.penalty;
+		for (int i = 0; i < num_ver_cor; i ++) {
+			if (!this.corridor(animat, can_look)) {
+				punishment(animat, can_look);
+				return reward + this.penalty;
+			}
 		}
 		this.home(animat, can_look);
 		return reward;
 	}
 
-	EvalResult evaluate (Phenotype p) {
-		int [] sw = this.switch_points(this.num_trip, this.cycle, this.region);
-		double tmp =  Math.random() - 0.5;
-		int target = (int)(Math.abs(tmp)/tmp);
+	EvalResult evaluate (Phenotype p, int num_ver_cor, int num_hor_cor) {
 		boolean can_look = true;
-		int learn_duration = sw [(int)(sw.length / 2)];
+		int learn_duration = this.NUM_TRIP / 2;
 
 		double reward_sum = 0.0;
 		Data d = new Data();
+		Animat a = (Animat)p;
 		for (int i = 0; i < this.num_trip; i ++) {
-			for (int j = 0; j < sw.length; j ++) {
-				if (i == learn_duration) {
-					can_look = false;
-				}
-				if (i == sw[j]) {
-					target = target * -1;
-					break;
-				}
-				target = target;
+			if (i == learn_duration) {
+				can_look = true;
 			}
-			Animat a = (Animat)p;
-			double reward = this.trip(a, target, can_look);
-			d.pushData(target, reward);
+			double reward = this.trip(a, 1, num_ver_cor, num_hor_cor, can_look);
+			d.pushData(1, reward);
 			reward_sum += reward;
 		}
 		return new EvalResult(reward_sum, d);
