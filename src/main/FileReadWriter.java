@@ -4,25 +4,25 @@ import java.io.IOException;
 
 public class FileReadWriter {
 	final int WRITE_CYCLE = 10;
-	final String WRITE_FILENAME = "/tmp/tmp3.txt";
+	final String WRITE_FILENAME = "/tmp/debug.txt";
 	File wfile;
 	Genotype [][] store;
-	
+
 	FileReadWriter(){
 		wfile = new File(WRITE_FILENAME);
 		this.store = new Genotype[WRITE_CYCLE][];
 	}
-	
+
 	void putGenoType(int generation, Genotype [] genotypes) {
 		if (generation != 0 && generation % WRITE_CYCLE == 0) {
 			for (int i = 0; i < WRITE_CYCLE; i++) {
-				writeFile(generation, this.store[i]);
+				writeFile(generation - WRITE_CYCLE + i, this.store[i]);
 			}
 		}
 		int row = generation % WRITE_CYCLE;
 		this.store[row] = genotypes;
 	}
-	
+
 	void writeFile(int generation, Genotype [] store) {
 		try {
 			FileWriter filewriter = new FileWriter(this.wfile, true);
@@ -32,7 +32,7 @@ public class FileReadWriter {
 			System.err.println(e);
 		}
 	}
-	
+
 	void writeGeneration(FileWriter fw, int generation, Genotype [] store) {
 		try {
 			for (int idx = 0; idx < store.length; idx ++) {
