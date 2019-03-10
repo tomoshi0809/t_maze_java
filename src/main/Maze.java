@@ -16,10 +16,13 @@ abstract public class Maze extends Environment {
 	}
 
 	boolean home(Animat animat, boolean can_look) {
-		double [][] input = {{1.0}, {0.0}, {0.0}, {0.0}, {1.0}, {0.0}};
+		double home = 1.0;
+		double bias = 1.0;
+		double can_look_input = 0.0;
 		if (!can_look) {
-			input[5][0] = 1.0;
+			can_look_input = 1.0;
 		}
+		double [][] input = {{home}, {0.0}, {0.0}, {0.0}, {bias}, {can_look_input}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("MS: " + out[0][0]);
@@ -31,10 +34,12 @@ abstract public class Maze extends Environment {
 	}
 
 	boolean corridor(Animat animat, boolean can_look) {
-		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {1.0}, {0.0}};
+		double bias = 1.0;
+		double can_look_input = 0.0;
 		if (!can_look) {
-			input[5][0] = 1.0;
+			can_look_input = 1.0;
 		}
+		double [][] input = {{0.0}, {0.0}, {0.0}, {0.0}, {bias}, {can_look_input}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("CO: " + out[0][0]);
@@ -46,11 +51,14 @@ abstract public class Maze extends Environment {
 	}
 
 	double junction(Animat animat, boolean can_look) {
-		double [][] input = {{0.0}, {1.0}, {0.0}, {0.0}, {1.0}, {0.0}};
+		double junction = 1.0;
+		double can_look_input = 0.0;
+		double bias = 1.0;
 		if (!can_look) {
-			input[1][0] = 0.0;
-			input[5][0] = 1.0;
+			junction = 0.0;
+			can_look_input = 1.0;
 		}
+		double [][] input = {{0.0}, {junction}, {0.0}, {0.0}, {bias}, {can_look_input}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("JN: " + out[0][0]);
@@ -58,11 +66,28 @@ abstract public class Maze extends Environment {
 		return out[0][0];
 	}
 
-	double maze_end(Animat animat, double reward, boolean can_look) {
-		double [][] input = {{0.0}, {0.0}, {1.0}, {reward}, {1.0}, {0.0}};
+	void punishment(Animat animat, boolean can_look) {
+		double punishment = 1.0;
+		double can_look_input = 0.0;
+		double bias = 1.0;
 		if (!can_look) {
-			input[5][0] = 1.0;
+			can_look_input = 1.0;
 		}
+		double [][] input = {{0.0}, {0.0}, {0.0}, {punishment}, {bias}, {can_look_input}};
+		double [][] out = this.thinking(animat, input);
+		if (this.debug) {
+			System.out.println("JN: " + out[0][0]);
+		}
+	}
+
+	double maze_end(Animat animat, double reward, boolean can_look) {
+		double bias = 1.0;
+		double can_look_input = 0.0;
+		double maze_end = 1.0;
+		if (!can_look) {
+			can_look_input = 1.0;
+		}
+		double [][] input = {{0.0}, {0.0}, {maze_end}, {0.0}, {bias}, {can_look_input}};
 		double [][] out = this.thinking(animat, input);
 		if (this.debug) {
 			System.out.println("ME: " + out[0][0]);

@@ -35,19 +35,23 @@ public class SingleTMaze extends Maze{
 
 	double trip(Animat animat, double target, boolean can_look) {
 		if (!this.home(animat, can_look)) {
+			punishment(animat, can_look);
 			return this.penalty;
 		}
 
 		if (!this.corridor(animat, can_look)) {
+			punishment(animat, can_look);
 			return this.penalty;
 		}
 
 		double turn1 = this.junction(animat, can_look);
-		if (Math.abs(turn1) < (double)1/3) {
+		if (!(0 <= turn1 && turn1 < (double)1/3)) {
+			punishment(animat, can_look);
 			return this.penalty;
 		}
 
 		if (!this.corridor(animat, can_look)) {
+			punishment(animat, can_look);
 			return this.penalty;
 		}
 
@@ -60,15 +64,18 @@ public class SingleTMaze extends Maze{
 		this.maze_end(animat, reward, can_look);
 
 		if (!this.corridor(animat, can_look)) {
+			punishment(animat, can_look);
 			return reward + this.penalty;
 		}
 
 		double turn2 = this.junction(animat, can_look);
-		if (Math.abs(turn2) < (double)1/3 || (Math.abs(turn2)/turn2) == (Math.abs(turn1)/turn1)) {
+		if (!(turn2 < 0 && turn2 >= (double)-1/3)) {
+			punishment(animat, can_look);
 			return reward + this.penalty;
 		}
 
 		if (!this.corridor(animat, can_look)) {
+			punishment(animat, can_look);
 			return reward + this.penalty;
 		}
 		this.home(animat, can_look);
