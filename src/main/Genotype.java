@@ -7,6 +7,7 @@ public class Genotype {
 	double [][]weights;
 	double []rule;
 	double fitness;
+	double MIN_FITNESS = -9999;
 	Data data;
 	GeneTag genetag;
 
@@ -23,7 +24,7 @@ public class Genotype {
 		for (int i = 0; i < 5; i ++) {
 			this.rule[i] = Math.random() * 3.0 - 1.5;
 		}
-		this.fitness = 0.0;
+		this.fitness = MIN_FITNESS;
 		this.genetag = new GeneTag();
 	}
 
@@ -101,7 +102,7 @@ public class Genotype {
 		for (int i = 0; i < 5; i++) {
 			ret.rule[i] = g.rule[i];
 		}
-		ret.fitness = 0;
+		ret.fitness = g.fitness;
 		ret.genetag = new GeneTag();
 		return ret;
 	}
