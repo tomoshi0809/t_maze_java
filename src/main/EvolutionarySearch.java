@@ -45,7 +45,8 @@ public class EvolutionarySearch {
 	}
 
 	public void run(int numGenerations, boolean isPrintStats, boolean isWriteFile) {
-		int [][] numCors = createNumCors(numGenerations);
+		System.out.println("Generation, Mean, Median, Std, Max, Min, rewRight, rewLeft, Rule0-4");
+		int[][] numCors = createNumCors(numGenerations);
 		for (int generation = 0; generation < numGenerations; generation++) {
 			int numVerCor = numCors[generation][0];
 			int numHorCor = numCors[generation][1];
@@ -67,27 +68,28 @@ public class EvolutionarySearch {
 			if (generation == numGenerations - 1) {
 				break;
 			}
-			Genotype [] selected = select(this.pop, this.numPops, this.numGroup);
-			Genotype [] crossovered = crossover(selected, CROSS_RATE);
-			this.pop = cleanFitness(mutate(crossovered, MUTATE_RATE, SIGMA));
+			Genotype[] selected = select(this.pop, this.numPops, this.numGroup);
+			Genotype[] crossovered = crossover(selected, CROSS_RATE);
+			Genotype [] mutated = mutate(crossovered, MUTATE_RATE, SIGMA);
+			this.pop = cleanFitness(mutated);
 		}
 	}
 
-	int [][] createNumCors(int numGeneration){
-		int [][] ret = new int[numGeneration][2];
-		for (int i = 0; i < numGeneration; i ++) {
-			ret[i][0] = 1 + (int)(Math.random() * 2);
-			ret[i][1] = 1 + (int)(Math.random() * 2);
+	int[][] createNumCors(int numGeneration) {
+		int[][] ret = new int[numGeneration][2];
+		for (int i = 0; i < numGeneration; i++) {
+			ret[i][0] = 1 + (int) (Math.random() * 2);
+			ret[i][1] = 1 + (int) (Math.random() * 2);
 		}
 		return ret;
 	}
 
-	void evaluate(Genotype[] pop, int numEval,  int numVerCor, int numHorCor) {
+	void evaluate(Genotype[] pop, int numEval, int numVerCor, int numHorCor) {
 		int npop = pop.length;
 		int nperthread = npop / NUM_THREAD;
 		int thidx = 0;
 
-		Thread [] th = new Thread[NUM_THREAD];
+		Thread[] th = new Thread[NUM_THREAD];
 
 		while (thidx < NUM_THREAD) {
 			int start = nperthread * thidx;
@@ -95,16 +97,16 @@ public class EvolutionarySearch {
 			if (thidx == NUM_THREAD - 1) {
 				end = npop;
 			}
-			Genotype [] unit = new Genotype[end - start];
-			for (int i = 0; i < (end - start); i ++) {
+			Genotype[] unit = new Genotype[end - start];
+			for (int i = 0; i < (end - start); i++) {
 				unit[i] = pop[start + i];
 			}
-			th [thidx] = new EvaluateThread(this.env, unit, this.numEval, this.rand, numVerCor, numHorCor);
+			th[thidx] = new EvaluateThread(this.env, unit, this.numEval, this.rand, numVerCor, numHorCor);
 			th[thidx].start();
-			thidx ++;
+			thidx++;
 		}
 
-		for (thidx = 0; thidx < NUM_THREAD; thidx ++) {
+		for (thidx = 0; thidx < NUM_THREAD; thidx++) {
 			try {
 				th[thidx].join();
 			} catch (InterruptedException e) {
@@ -116,14 +118,14 @@ public class EvolutionarySearch {
 
 	double[] fitStats(Genotype[] pop) {
 		double[] fits = new double[pop.length];
-		double [][] rules = new double [5][pop.length];
+		double[][] rules = new double[5][pop.length];
 		double[] rewRight = new double[pop.length];
 		double[] rewLeft = new double[pop.length];
 		for (int i = 0; i < pop.length; i++) {
 			fits[i] = pop[i].fitness;
 			rewRight[i] = pop[i].data.getAveRewRight();
 			rewLeft[i] = pop[i].data.getAveRewLeft();
-			for (int index = 0; index < 5; index ++) {
+			for (int index = 0; index < 5; index++) {
 				rules[index][i] = pop[i].rule[index];
 			}
 		}
@@ -131,7 +133,8 @@ public class EvolutionarySearch {
 		StandardDeviation std = new StandardDeviation(false);
 		double[] ret = { StatUtils.mean(fits), StatUtils.percentile(fits, 50), std.evaluate(fits),
 				StatUtils.max(fits), StatUtils.min(fits), StatUtils.mean(rewRight), StatUtils.mean(rewLeft),
-				StatUtils.mean(rules[0]), StatUtils.mean(rules[1]), StatUtils.mean(rules[2]),StatUtils.mean(rules[3]),StatUtils.mean(rules[4])};
+				StatUtils.mean(rules[0]), StatUtils.mean(rules[1]), StatUtils.mean(rules[2]), StatUtils.mean(rules[3]),
+				StatUtils.mean(rules[4])};
 		return ret;
 	}
 
@@ -141,10 +144,10 @@ public class EvolutionarySearch {
 		}
 		Genotype[] ret = new Genotype[numPop];
 		int offset = (int) (Math.random() * numPop);
-		for (int count = 0; count < (numPop / numGroup); count ++) {
+		for (int count = 0; count < (numPop / numGroup); count++) {
 			int head = (offset + numGroup * count) % numPop;
-			Genotype [] group = new Genotype[numGroup];
-			for (int index = head; index < head + numGroup; index ++) {
+			Genotype[] group = new Genotype[numGroup];
+			for (int index = head; index < head + numGroup; index++) {
 				group[index - head] = pop[index % numPop];
 			}
 			int bestidx = getBestIndex(group);
