@@ -49,6 +49,8 @@ public class EvolutionarySearch {
 		for (int generation = 0; generation < numGenerations; generation++) {
 			int numVerCor = numCors[generation][0];
 			int numHorCor = numCors[generation][1];
+			numVerCor = 1;
+			numHorCor = 1;
 			evaluate(this.pop, this.numEval, numVerCor, numHorCor);
 			if (isPrintStats) {
 				double[] stats = fitStats(this.pop);
