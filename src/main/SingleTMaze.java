@@ -6,7 +6,7 @@ public class SingleTMaze extends Maze{
 	final int NUM_TRIP = 100;
 	final int CYCLE = 10;
 	final int REGION =  3;
-	static double noiseStd = 0.005;
+	static double noiseStd = 0.001;
 	static int numThink = 3;
 	double maxReward;
 	double minReward;

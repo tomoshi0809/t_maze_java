@@ -6,8 +6,8 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 public class EvolutionarySearch {
 	final double CROSS_RATE = 0.1;
 	final double MUTATE_RATE = 0.1;
-	final double SIGMA = 0.2;
-	final int NUM_THREAD = 2;
+	final double SIGMA = 0.3;	// STD of Gaussian for mutation
+	final int NUM_THREAD = 1;
 	Environment env;
 	Phenotype p;
 	int numInputs;
@@ -37,7 +37,7 @@ public class EvolutionarySearch {
 		for (int i = 0; i < numPops; i++) {
 			this.pop[i] = new Genotype(numInputs, numNeurons);
 		}
-		this.numEval = 5;
+		this.numEval = 1;
 		this.envCls = envCls;
 		this.pheCls = pheCls;
 		this.rand = new Random();

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class FileReadWriter {
 	final int WRITE_CYCLE = 10;
-	final String WRITE_FILENAME = "/tmp/debug.txt";
+	final String WRITE_FILENAME = "/tmp/tmp5.txt";
 	File wfile;
 	Genotype [][] store;
 

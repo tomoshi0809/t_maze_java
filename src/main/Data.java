@@ -5,8 +5,7 @@ public class Data {
 	private int countTrialLeft;
 	private double rewRight;
 	private double rewLeft;
-	
-	
+
 	Data(){
 		this.aveRewRight = 0;
 		this.aveRewLeft = 0;
@@ -15,7 +14,7 @@ public class Data {
 		this.rewRight = 0;
 		this.rewLeft = 0;
 	}
-	
+
 	void pushData(int target, double reward) {
 		if (target == 1) {	//TODO: this hard-coded part should be updated.
 			this.countTrialRight ++;
@@ -25,12 +24,12 @@ public class Data {
 			this.rewLeft += reward;
 		}
 	}
-	
+
 	double getAveRewLeft () {
 		this.aveRewLeft = (double) this.rewLeft / this.countTrialLeft;
 		return this.aveRewLeft;
 	}
-	
+
 	double getAveRewRight() {
 		this.aveRewRight = (double) this.rewRight / this.countTrialRight;
 		return this.aveRewRight;
