@@ -145,10 +145,11 @@ public class EvolutionarySearch {
 			for (int index = head; index < head + numGroup; index ++) {
 				group[index - head] = pop[index % numPop];
 			}
-			Genotype groupBest = getBest(group);
-			ret[head] = pop[head];
-			for (int index = head + 1; index < head + numGroup; index ++) {
+			int bestidx = getBestIndex(group);
+			Genotype groupBest = group[bestidx];
+			ret[head] = Genotype.copy(groupBest);
 			ret[head].genetag.generateType = "GroupBest Src Index:" + String.valueOf(head + bestidx);
+			for (int index = head + 1; index < head + numGroup; index++) {
 				ret[index % numPop] = Genotype.copy(groupBest);
 				ret[index % numPop].genetag.generateType = "GroupBestCopy Src Index:" + String.valueOf((head + bestidx) % numPop);
 			}
@@ -157,11 +158,12 @@ public class EvolutionarySearch {
 	}
 
 	Genotype[] crossover(Genotype[] pop, double cRate) {
-		Genotype [] ret = new Genotype[pop.length];
-		Genotype best = getBest(pop);
-		for (int index = 0; index < pop.length; index ++) {
-			if (pop[index] != best && Math.random() < cRate) {
-				Genotype partner = pop[(int)(Math.random() * pop.length)];
+		Genotype[] ret = new Genotype[pop.length];
+		int bestidx = getBestIndex(pop);
+		for (int index = 0; index < pop.length; index++) {
+			if (index != bestidx && Math.random() < cRate) {
+				int partnerIdx = (int) (Math.random() * pop.length);
+				Genotype partner = pop[partnerIdx];
 				Genotype child = Genotype.crossGenotype(pop[index], partner);
 				ret[index] = child;
 				ret[index].genetag.generateType = "Crossover Parent:" + String.valueOf(index) + " " + String.valueOf(partnerIdx);
@@ -173,33 +175,36 @@ public class EvolutionarySearch {
 	}
 
 	Genotype[] mutate(Genotype[] pop, double mRate, double sigma) {
-		Genotype best = getBest(pop);
-		for (int index = 0; index < pop.length; index ++) {
-			pop[index] = Genotype.mutateGenotype(pop[index], mRate, sigma, this.rand);
+		int bestidx = getBestIndex(pop);
+		Genotype best = pop[bestidx];
+		for (int index = 0; index < pop.length; index++) {
+			if (index != bestidx){
+				pop[index] = Genotype.mutateGenotype(pop[index], mRate, sigma, this.rand);
 				pop[index].genetag.generateType = "Mutate Src Idx:" + index;
+			}
 		}
 		return pop;
 	}
 
 	Genotype[] cleanFitness(Genotype[] pop) {
-		for (int index = 0; index < pop.length; index ++) {
+		for (int index = 0; index < pop.length; index++) {
 			pop[index].fitness = 0;
 		}
 		return pop;
 	}
 
-	Genotype getBest(Genotype [] group) {
+	int getBestIndex(Genotype[] group) {
 		if (group.length == 0) {
 			System.err.println("EvolutionarySearch - getBest() receives an empty group");
 		}
-		double max = 0;
+		double max = -9999;
 		int index = 0;
-		for (int i = 0; i < group.length; i ++) {
+		for (int i = 0; i < group.length; i++) {
 			if (group[i].fitness >= max) {
 				max = group[i].fitness;
 				index = i;
 			}
 		}
-		return group[index];
+		return index;
 	}
 }
