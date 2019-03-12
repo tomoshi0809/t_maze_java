@@ -8,6 +8,7 @@ public class Genotype {
 	double []rule;
 	double fitness;
 	Data data;
+	GeneTag genetag;
 
 	Genotype(){}
 
@@ -23,6 +24,7 @@ public class Genotype {
 			this.rule[i] = Math.random() * 3.0 - 1.5;
 		}
 		this.fitness = 0.0;
+		this.genetag = new GeneTag();
 	}
 
 	static Genotype crossGenotype(Genotype parent1, Genotype parent2) {
@@ -100,6 +102,7 @@ public class Genotype {
 			ret.rule[i] = g.rule[i];
 		}
 		ret.fitness = 0;
+		ret.genetag = new GeneTag();
 		return ret;
 	}
 

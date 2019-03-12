@@ -148,7 +148,9 @@ public class EvolutionarySearch {
 			Genotype groupBest = getBest(group);
 			ret[head] = pop[head];
 			for (int index = head + 1; index < head + numGroup; index ++) {
+			ret[head].genetag.generateType = "GroupBest Src Index:" + String.valueOf(head + bestidx);
 				ret[index % numPop] = Genotype.copy(groupBest);
+				ret[index % numPop].genetag.generateType = "GroupBestCopy Src Index:" + String.valueOf((head + bestidx) % numPop);
 			}
 		}
 		return ret;
@@ -162,6 +164,7 @@ public class EvolutionarySearch {
 				Genotype partner = pop[(int)(Math.random() * pop.length)];
 				Genotype child = Genotype.crossGenotype(pop[index], partner);
 				ret[index] = child;
+				ret[index].genetag.generateType = "Crossover Parent:" + String.valueOf(index) + " " + String.valueOf(partnerIdx);
 			} else {
 				ret[index] = pop[index];
 			}
@@ -173,6 +176,7 @@ public class EvolutionarySearch {
 		Genotype best = getBest(pop);
 		for (int index = 0; index < pop.length; index ++) {
 			pop[index] = Genotype.mutateGenotype(pop[index], mRate, sigma, this.rand);
+				pop[index].genetag.generateType = "Mutate Src Idx:" + index;
 		}
 		return pop;
 	}

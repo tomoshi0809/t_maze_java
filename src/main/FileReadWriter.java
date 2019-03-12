@@ -37,7 +37,7 @@ public class FileReadWriter {
 		try {
 			for (int idx = 0; idx < store.length; idx ++) {
 				Genotype g = store[idx];
-				fw.write("generation: " + generation + " index: " + idx + "," + g.fitness + "," + g.data.getAveRewRight() + "," + g.data.getAveRewLeft() + "\n");
+				fw.write("generation: " + generation + " index: " + idx + "," + g.fitness + "," + g.data.getAveRewRight() + "," + g.data.getAveRewLeft() + "," + g.genetag.generateType +"\n");
 				fw.write("weights: ");
 				for (int i = 0; i < g.weights.length; i++) {
 					for (int j = 0; j < g.weights[0].length; j++) {
