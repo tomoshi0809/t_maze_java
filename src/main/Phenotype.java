@@ -3,14 +3,16 @@ import java.util.Random;
 
 public class Phenotype {
 	int numInputs;
-	int numNeurons;
+	int numStdNeurons;
+	int numMdlNeurons;
 	double [][] weights;
 	double [] rule;
 	Random rand;
 
 	Phenotype(Genotype g, Random r){
 		this.numInputs = g.numInputs;
-		this.numNeurons = g.numNeurons;
+		this.numStdNeurons = g.numStdNeurons;
+		this.numMdlNeurons = g.numMdlNeurons;
 		this.weights = transformWeights(g.weights);
 		this.rule = g.rule;
 		this.rand = r;

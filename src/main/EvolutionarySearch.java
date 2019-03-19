@@ -7,11 +7,12 @@ public class EvolutionarySearch {
 	final double CROSS_RATE = 0.1;
 	final double MUTATE_RATE = 0.1;
 	final double SIGMA = 0.3;	// STD of Gaussian for mutation
-	final int NUM_THREAD = 1;
+	final int NUM_THREAD = 5;
 	Environment env;
 	Phenotype p;
 	int numInputs;
-	int numNeurons;
+	int numStdNeurons;
+	int numMdlNeurons;
 	int numPops;
 	int numGroup;
 	Genotype[] pop;
@@ -21,7 +22,7 @@ public class EvolutionarySearch {
 	Random rand;
 	FileReadWriter frw;
 
-	EvolutionarySearch(Class envCls, Class pheCls, int numNeurons, int numPops, int numGroup) {
+	EvolutionarySearch(Class envCls, Class pheCls, int numStdNeurons, int numMdlNeurons, int numPops, int numGroup) {
 		try {
 			Class envClass = Class.forName(envCls.getName());
 			this.env = (Environment) envClass.newInstance();
@@ -30,12 +31,12 @@ public class EvolutionarySearch {
 			System.exit(0);
 		}
 		this.numInputs = env.numInputs;
-		this.numNeurons = numNeurons;
+		this.numStdNeurons = numStdNeurons;
 		this.numPops = numPops;
 		this.numGroup = numGroup;
 		this.pop = new Genotype[numPops];
 		for (int i = 0; i < numPops; i++) {
-			this.pop[i] = new Genotype(numInputs, numNeurons);
+			this.pop[i] = new Genotype(numInputs, numStdNeurons, numMdlNeurons);
 		}
 		this.numEval = 1;
 		this.envCls = envCls;

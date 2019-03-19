@@ -80,6 +80,15 @@ class MatrixTest {
 		assertTrue(f);
 	}
 
+	@Test
+	void testMask() {
+		double [][] m1 = {{1,2}, {3,4}};
+		int [][] mask = {{1,1}, {1,0}};
+		double [][] expected = {{1,2}, {3,0}};
+		boolean f = assertEual2DArray(Matrix.mask(m1, mask), expected);
+		assertTrue(f);
+	}
+
 	boolean assertEual2DArray(double [][] m1, double [][] m2) {
 		if ((m1.length != m2.length) || (m1[0].length != m2[0].length)){
 			return false;

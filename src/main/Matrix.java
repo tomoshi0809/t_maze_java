@@ -2,6 +2,7 @@
 public class Matrix {
 	public static double [][] dot (double [][] m1, double [][] m2){
 		if (m1[0].length != m2.length) {
+			System.out.println(m1[0].length + " " +m2.length);
 			System.err.println("dot() - Matrix size is not appropriate");
 			System.exit(1);
 		}
@@ -45,6 +46,23 @@ public class Matrix {
 		for (int i = 0; i < nrow; i ++) {
 			for (int j = 0; j < ncol; j ++) {
 				ret[i][j] = m1[i][j] + m2[i][j];
+			}
+		}
+		return ret;
+	}
+
+	public static double [][] mask(double [][] m1, int [][] mask) {
+		int nrow = m1.length;
+		int ncol = m1[0].length;
+		double [][] ret = new double [nrow][ncol];
+
+		for (int i = 0; i < nrow; i ++) {
+			for (int j = 0; j < ncol; j ++) {
+				if (mask[i][j] == 1) {
+					ret[i][j] = m1[i][j];
+				} else {
+					ret[i][j] = 0;
+				}
 			}
 		}
 		return ret;
@@ -105,6 +123,28 @@ public class Matrix {
 		double [] ret = new double [Math.min(end, array.length) - start];
 		for (int i = start; i < Math.min(end, array.length); i ++) {
 			ret[i - start] = array[i];
+		}
+		return ret;
+	}
+
+	public static double [][] zeros (int nrow, int ncol) {
+		double [][] ret = new double [nrow][ncol];
+		for (int i = 0; i < nrow; i ++) {
+			for (int j = 0; j < ncol; j ++) {
+				ret[i][j] = 0;
+			}
+
+		}
+		return ret;
+	}
+
+	public static double [][] ones (int nrow, int ncol) {
+		double [][] ret = new double [nrow][ncol];
+		for (int i = 0; i < nrow; i ++) {
+			for (int j = 0; j < ncol; j ++) {
+				ret[i][j] = 1;
+			}
+
 		}
 		return ret;
 	}

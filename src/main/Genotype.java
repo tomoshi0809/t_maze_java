@@ -2,7 +2,8 @@ import java.util.Random;
 
 public class Genotype {
 	int numInputs;
-	int numNeurons;
+	int numStdNeurons;
+	int numMdlNeurons;
 	double sgRate; //sgRate: Synaptogenesis rate
 	double [][]weights;
 	double []rule;
@@ -13,12 +14,13 @@ public class Genotype {
 
 	Genotype(){}
 
-	Genotype(int numInputs, int numNeurons){
+	Genotype(int numInputs, int numStdNeurons, int numMdlNeurons){
 		this.numInputs = numInputs;
-		this.numNeurons = numNeurons;
+		this.numStdNeurons = numStdNeurons;
+		this.numMdlNeurons = numMdlNeurons;
 		this.sgRate = 1.0;
-		int r = this.numNeurons;
-		int c = this.numInputs + this.numNeurons;
+		int r = this.numStdNeurons + this.numMdlNeurons;
+		int c = this.numInputs + this.numStdNeurons + this.numMdlNeurons;
 		this.weights = initializeWeights(r, c, this.sgRate);
 		this.rule = new double[5];
 		for (int i = 0; i < 5; i ++) {
@@ -89,10 +91,11 @@ public class Genotype {
 			System.err.println("Genotype - copy () receives null Genotype");
 		}
 		Genotype ret = new Genotype();
-		ret.weights = new double[g.numNeurons][g.numNeurons + g.numInputs];
+		ret.weights = new double[g.numStdNeurons + g.numMdlNeurons][g.numStdNeurons + g.numInputs + g.numMdlNeurons];
 		ret.rule = new double[5];
 		ret.numInputs = g.numInputs;
-		ret.numNeurons = g.numNeurons;
+		ret.numStdNeurons = g.numStdNeurons;
+		ret.numMdlNeurons = g.numMdlNeurons;
 		ret.sgRate = g.sgRate;
 		for (int i = 0; i < g.weights.length; i++) {
 			for (int j = 0; j < g.weights[0].length; j++) {

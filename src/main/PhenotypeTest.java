@@ -9,7 +9,7 @@ class PhenotypeTest {
 
 	@Test
 	void testIsAll() {
-		Genotype g = new Genotype(5, 2);
+		Genotype g = new Genotype(5, 1, 1);
 		Phenotype ph = new Phenotype(g, new Random());
 		double [] array1 = {0, 0, 0, 0, 0};
 		double [] array2 = {1, 0, 0, 0, 0};
@@ -21,7 +21,7 @@ class PhenotypeTest {
 
 	@Test
 	void testTransform() {
-		Genotype g = new Genotype(5, 2);
+		Genotype g = new Genotype(5, 1, 1);
 		Phenotype ph = new Phenotype(g, new Random());
 		assertEquals(ph.transform(2.0, 10.0, 0.01), 8.0);
 		assertEquals(ph.transform(3.0, 10.0, 0.01), 10.0);

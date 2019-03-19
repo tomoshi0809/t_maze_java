@@ -3,13 +3,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileReadWriter {
+	static int fileCntr = 1;
 	final int WRITE_CYCLE = 10;
-	final String WRITE_FILENAME = "/tmp/tmp5.txt";
 	File wfile;
 	Genotype [][] store;
 
 	FileReadWriter(){
-		wfile = new File(WRITE_FILENAME);
+		while (true) {
+			String writeFileName = "/tmp/trial" + String.valueOf(fileCntr) + ".txt";
+			wfile = new File(writeFileName);
+			if (!wfile.exists()) {
+				break;
+			}
+			fileCntr ++;
+		}
 		this.store = new Genotype[WRITE_CYCLE][];
 	}
 

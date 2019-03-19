@@ -7,83 +7,149 @@ import org.junit.jupiter.api.Test;
 class AnimatTest {
 	@Test
 	void testBehave() {
-		Genotype g = new Genotype(5, 2);
+		Genotype g = new Genotype(5, 1, 1);
 		Animat a = new Animat(g, new Random());
-		a.state = zeros(a.numNeurons, 1);
+		a.state = zeros(a.numStdNeurons, 1);
 		a.weights = ones2D(2, 7);
-		int num_inputs = 5;
-		int num_neurons = 2;
+		int numInputs = 5;
+		int numStdNeurons = 1;
+		int numMdlNeurons = 1;
 
 		double [][] input = ones(a.numInputs,1);
-		double [][] output = Matrix.tanh(Matrix.scalar(num_inputs, ones(num_neurons, 1)));
-		a.state = zeros(num_neurons, 1);
-		boolean f = assertEual2DArray(a.behave(input), output);
+		double [][] output = Matrix.tanh(Matrix.scalar(0.5 * numInputs, ones(numStdNeurons + numMdlNeurons, 1)));
+		a.state = zeros(numStdNeurons + numMdlNeurons, 1);
+		double [][] actual = a.behave(input);
+		boolean f = assertEual2DArray(actual, output);
 		assertTrue(f);
 
-		output = Matrix.tanh(Matrix.scalar(num_inputs + num_neurons, ones(num_neurons, 1)));
-		a.state = ones(num_neurons, 1);
-		f = assertEual2DArray(a.behave(input), output);
+		output = Matrix.tanh(Matrix.scalar(0.5 * (numInputs + numStdNeurons), ones(numStdNeurons + numMdlNeurons, 1)));
+		a.state = ones(numStdNeurons+ numMdlNeurons, 1);
+		actual = a.behave(input);
+		f = assertEual2DArray(actual, output);
+		assertTrue(f);
+	}
+
+	@Test
+	void testModulate () {
+		Genotype g = new Genotype(5, 1, 1);
+		Animat a = new Animat(g, new Random());
+		a.state = zeros(a.numStdNeurons, 1);
+		a.weights = ones2D(2, 7);
+		int numInputs = 5;
+		int numStdNeurons = 1;
+		int numMdlNeurons = 1;
+
+		double [][] input = ones(a.numInputs,1);
+		double [][] output = Matrix.tanh(Matrix.scalar((double)numMdlNeurons/2, ones(numStdNeurons + numMdlNeurons, 1)));
+		a.state = ones(numStdNeurons + numMdlNeurons, 1);
+		double [][] actual = a.modulate(input);
+
+		boolean f = assertEual2DArray(actual, output);
 		assertTrue(f);
 	}
 
 	@Test
 	void testDelta_weight() {
-		Genotype g = new Genotype(5, 2);
+		Genotype g = new Genotype(5, 1, 1);
 		Animat a = new Animat(g, new Random());
-		a.state = zeros(a.numNeurons, 1);
+		a.state = zeros(a.numStdNeurons + a.numMdlNeurons, 1);
 		a.weights = ones2D(2, 7);
-		int num_inputs = 5;
-		int num_neurons = 2;
+		int numInputs = 5;
+		int numStdNeurons = 1;
+		int numMdlNeurons = 1;
 
 		double [][] input = ones(a.numInputs, 1);
-		double [][] output = ones(a.numNeurons, 1);
-		a.state = ones(num_neurons, 1);
+		double [][] output = ones(a.numStdNeurons + a.numMdlNeurons, 1);
+		double [][] modulations = {{1}, {1}};
+		a.state = ones(numStdNeurons + numMdlNeurons, 1);
 		a.rule[0] = 1;
 		a.rule[1] = 1;
 		a.rule[2] = 1;
 		a.rule[3] = 1;
 		a.rule[4] = 1;
 
-		double [][] expected_delta = Matrix.scalar(4, ones2D(num_neurons, num_inputs + num_neurons));
-		double [][] actual_delta = a.deltaWeight(input, output);
+		double [][] expected_delta = Matrix.scalar(Math.tanh(0.5) * 4, ones2D(numStdNeurons + numMdlNeurons, numInputs + numStdNeurons));
+		double [][] actual_delta = a.deltaWeight(input, output, modulations, a.state, a.numInputs, a.numStdNeurons, a.numMdlNeurons);
 		boolean f = assertEual2DArray(expected_delta, actual_delta);
 		assertTrue(f);
 	}
 
 	@Test
-	void testInspect_weight() {
-		Genotype g = new Genotype(5, 2);
+	void testLearnStdNeurons () {
+		Genotype g = new Genotype(5, 1, 1);
 		Animat a = new Animat(g, new Random());
-		a.state = zeros(a.numNeurons, 1);
+		a.state = ones(a.numStdNeurons + a.numMdlNeurons, 1);
 		a.weights = ones2D(2, 7);
-		int num_inputs = 5;
-		int num_neurons = 2;
-		double [][] input = ones2D(num_neurons, num_inputs + num_neurons);
-		double [][] output = ones2D(num_neurons, num_inputs + num_neurons);
-		a.state = ones(num_neurons, 1);
-		boolean f = assertEual2DArray(a.inspectWeight(input), output);
-	}
-
-	@Test
-	void testPerform() {
-
-	}
-
-	@Test
-	void testApply_rule() {
-		Genotype g = new Genotype(5, 2);
-		Animat a = new Animat(g, new Random());
-		a.state = zeros(a.numNeurons, 1);
-		a.weights = ones2D(2, 7);
-		int num_inputs = 5;
-		int num_neurons = 2;
-		a.state = ones(num_neurons, 1);
+		int numInputs = 5;
+		int numStdNeurons = 1;
+		int numMdlNeurons = 1;
 		a.rule[0] = 1;
 		a.rule[1] = 1;
 		a.rule[2] = 1;
 		a.rule[3] = 1;
 		a.rule[4] = 1;
-		assertTrue(a.applyRule(3, 4) == 20);
+
+		double [][] modulations = {{1}, {1}};
+		double [][] inputs = ones(a.numInputs, 1);
+		double [][] outputs = ones(a.numStdNeurons + a.numMdlNeurons, 1);
+		double [][] inspectedWeights = a.learnStdNeurons(inputs, outputs, numStdNeurons, numMdlNeurons, modulations);
+		double o = 1;
+
+		double delta_w = Math.tanh(o/2) * 4;
+		assertTrue(1 + delta_w == inspectedWeights[0][0]);
+	}
+
+	@Test
+	void testInspect_weight() {
+		Genotype g = new Genotype(5, 1, 1);
+		Animat a = new Animat(g, new Random());
+		a.state = zeros(a.numStdNeurons + a.numMdlNeurons, 1);
+		a.weights = ones2D(2, 7);
+		int numInputs = 5;
+		int numNeurons = 2;
+		double [][] input = ones2D(numNeurons, numInputs + numNeurons);
+		double [][] output = ones2D(numNeurons, numInputs + numNeurons);
+		a.state = ones(numNeurons, 1);
+		boolean f = assertEual2DArray(a.inspectWeight(input), output);
+		assertTrue(f);
+
+		double [][] input2 = {{-11}, {-11},{-11},{-11},{-11},{-11}};
+		double [][] output2 = {{-10}, {-10},{-10},{-10},{-10},{-10}};
+		boolean f2 = assertEual2DArray(a.inspectWeight(input), output);
+		assertTrue(f2);
+	}
+
+	@Test
+	void testPerform() {
+		Genotype g = new Genotype(5, 1, 1);
+		Animat a = new Animat(g, new Random());
+		a.weights = ones2D(2, 7);
+		int numInputs = 5;
+		int numStdNeurons = 1;
+		int numMdlNeurons = 1;
+		a.state[0][0] = 0;
+		a.state[1][0] = 0;
+		double [][] inputs = ones2D(numInputs, 1);
+		double [][] outputs = a.perform(inputs);
+		double [][] expected = {{Math.tanh((double)5/2)}, {Math.tanh((double)5/2)}};
+		assertTrue(assertEual2DArray(expected, outputs));
+	}
+
+	@Test
+	void testApply_rule() {
+		Genotype g = new Genotype(5, 1, 1);
+		Animat a = new Animat(g, new Random());
+		a.state = zeros(a.numStdNeurons + a.numMdlNeurons, 1);
+		a.weights = ones2D(1, 7);
+		int numInputs = 5;
+		int numNeurons = 2;
+		a.state = ones(numNeurons, 1);
+		a.rule[0] = 1;
+		a.rule[1] = 1;
+		a.rule[2] = 1;
+		a.rule[3] = 1;
+		a.rule[4] = 1;
+		assertTrue(a.applyRule(3, 4, 1) == Math.tanh((double)1/2) * 20);
 	}
 
 	double [][] ones (int len, int axis) {
