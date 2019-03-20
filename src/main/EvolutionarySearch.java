@@ -7,14 +7,14 @@ public class EvolutionarySearch {
 	final double CROSS_RATE = 0.1;
 	final double MUTATE_RATE = 0.1;
 	final double SIGMA = 0.3;	// STD of Gaussian for mutation
-	final int NUM_THREAD = 5;
+	final int NUM_THREAD = 1;
 	Environment env;
 	Phenotype p;
 	int numInputs;
 	int numStdNeurons;
 	int numMdlNeurons;
 	int numPops;
-	int numGroup;
+	int numGroupMember;
 	Genotype[] pop;
 	int numEval;
 	Class envCls;
@@ -22,7 +22,7 @@ public class EvolutionarySearch {
 	Random rand;
 	FileReadWriter frw;
 
-	EvolutionarySearch(Class envCls, Class pheCls, int numStdNeurons, int numMdlNeurons, int numPops, int numGroup) {
+	EvolutionarySearch(Class envCls, Class pheCls, int numStdNeurons, int numMdlNeurons, int numPops, int numGroupMember) {
 		try {
 			Class envClass = Class.forName(envCls.getName());
 			this.env = (Environment) envClass.newInstance();
@@ -33,7 +33,7 @@ public class EvolutionarySearch {
 		this.numInputs = env.numInputs;
 		this.numStdNeurons = numStdNeurons;
 		this.numPops = numPops;
-		this.numGroup = numGroup;
+		this.numGroupMember = numGroupMember;
 		this.pop = new Genotype[numPops];
 		for (int i = 0; i < numPops; i++) {
 			this.pop[i] = new Genotype(numInputs, numStdNeurons, numMdlNeurons);
@@ -69,7 +69,7 @@ public class EvolutionarySearch {
 			if (generation == numGenerations - 1) {
 				break;
 			}
-			Genotype[] selected = select(this.pop, this.numPops, this.numGroup);
+			Genotype[] selected = select(this.pop, this.numPops, this.numGroupMember);
 			Genotype[] crossovered = crossover(selected, CROSS_RATE);
 			Genotype [] mutated = mutate(crossovered, MUTATE_RATE, SIGMA);
 			this.pop = cleanFitness(mutated);
@@ -139,23 +139,23 @@ public class EvolutionarySearch {
 		return ret;
 	}
 
-	Genotype[] select(Genotype[] pop, int numPop, int numGroup) {
+	Genotype[] select(Genotype[] pop, int numPop, int numGroupMember) {
 		if (pop.length == 0) {
 			System.err.println("EvolutionarySearch - select () receives an empty pop");
 		}
 		Genotype[] ret = new Genotype[numPop];
 		int offset = (int) (Math.random() * numPop);
-		for (int count = 0; count < (numPop / numGroup); count++) {
-			int head = (offset + numGroup * count) % numPop;
-			Genotype[] group = new Genotype[numGroup];
-			for (int index = head; index < head + numGroup; index++) {
+		for (int count = 0; count < (numPop / numGroupMember); count++) {
+			int head = (offset + numGroupMember * count) % numPop;
+			Genotype[] group = new Genotype[numGroupMember];
+			for (int index = head; index < head + numGroupMember; index++) {
 				group[index - head] = pop[index % numPop];
 			}
 			int bestidx = getBestIndex(group);
 			Genotype groupBest = group[bestidx];
 			ret[head] = Genotype.copy(groupBest);
 			ret[head].genetag.generateType = "GroupBest Src Index:" + String.valueOf(head + bestidx);
-			for (int index = head + 1; index < head + numGroup; index++) {
+			for (int index = head + 1; index < head + numGroupMember; index++) {
 				ret[index % numPop] = Genotype.copy(groupBest);
 				ret[index % numPop].genetag.generateType = "GroupBestCopy Src Index:" + String.valueOf((head + bestidx) % numPop);
 			}
