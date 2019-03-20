@@ -1,25 +1,19 @@
 
 public class SingleTMaze extends Maze{
-	final double MAX_REWARD =  1.0;
-	final double MIN_REWARD =  0.1;
-	final double PENALTY    = -0.5;
 	final int NUM_TRIP = 100;
 	final int CYCLE = 10;
 	final int REGION =  3;
+	final double MIN_REWARD = -1.0;
+	final double MAX_REWARD = 1.0;
 	static double noiseStd = 0.001;
 	static int numThink = 3;
-	double maxReward;
-	double minReward;
-	double penalty;
+	static double rewardSlope;
 	int numTrip;
 	int cycle;
 	int region;
 
 	SingleTMaze(){
 		super(SingleTMaze.noiseStd, SingleTMaze.numThink);
-		this.maxReward = MAX_REWARD;
-		this.minReward = MIN_REWARD;
-		this.penalty = PENALTY;
 		this.numTrip = NUM_TRIP;
 		this.cycle = CYCLE;
 		this.region = REGION;
@@ -33,55 +27,72 @@ public class SingleTMaze extends Maze{
 		this.region = REGION;
 	}
 
+	double getReward(double walkcntr) {
+		double reward = this.MIN_REWARD + walkcntr * this.rewardSlope;
+		return reward;
+	}
+
 	double trip(Animat animat, double target, int numVerCor, int numHorCor, boolean canLook) {
+		this.rewardSlope = (double)(this.MAX_REWARD - this.MIN_REWARD) / (2 * (2 + numVerCor + numHorCor));
+		int walkcntr = 0;
+
 		if (!this.home(animat, canLook)) {
 			punishment(animat, canLook);
-			return this.penalty;
+			return getReward(walkcntr);
 		}
+		walkcntr ++;
 
 		for (int i = 0; i < numVerCor; i ++) {
 			if (!this.corridor(animat, canLook)) {
 				punishment(animat, canLook);
-				return this.penalty;
+				return getReward(walkcntr);
 			}
+			walkcntr ++;
 		}
 
 		double turn1 = this.junction(animat, canLook);
 		if (!(turn1 >= (double)1/3)) {
 			punishment(animat, canLook);
-			return this.penalty;
+			return getReward(walkcntr);
 		}
+		walkcntr ++;
 
 		for (int i = 0; i < numHorCor; i ++) {
 			if (!this.corridor(animat, canLook)) {
 				punishment(animat, canLook);
-				return this.penalty;
+				return getReward(walkcntr);
 			}
+			walkcntr ++;
 		}
+
 		this.mazeEnd(animat, 1, canLook);
+		walkcntr ++;
 
 		double reward = this.MAX_REWARD;
 		for (int i = 0; i < numHorCor; i ++) {
 			if (!this.corridor(animat, canLook)) {
 				punishment(animat, canLook);
-				return reward + this.penalty;
+				return getReward(walkcntr);
 			}
+			walkcntr ++;
 		}
 
 		double turn2 = this.junction(animat, canLook);
 		if (!(turn2 < (double)-1/3)) {
 			punishment(animat, canLook);
-			return reward + this.penalty;
+			return getReward(walkcntr);
 		}
+		walkcntr ++;
 
 		for (int i = 0; i < numVerCor; i ++) {
 			if (!this.corridor(animat, canLook)) {
 				punishment(animat, canLook);
-				return reward + this.penalty;
+				return getReward(walkcntr);
 			}
+			walkcntr ++;
 		}
 		this.home(animat, canLook);
-		return reward;
+		return getReward(walkcntr);
 	}
 
 	EvalResult evaluate (Phenotype p, int numVerCor, int numHorCor) {
