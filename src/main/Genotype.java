@@ -123,11 +123,4 @@ public class Genotype {
 		}
 		return ret;
 	}
-
-	int randNNeurons(int ulim) {
-		if (ulim == 0) {
-			ulim = 20;
-		}
-		return (int)(Math.random() * (ulim - 1)) + 1;
-	}
 }
