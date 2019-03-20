@@ -10,7 +10,7 @@ public class FileReadWriter {
 
 	FileReadWriter(){
 		while (true) {
-			String writeFileName = "/tmp/trial" + String.valueOf(fileCntr) + ".txt";
+			String writeFileName = "/home/ubuntu/datastore/trial" + String.valueOf(fileCntr) + ".txt";
 			wfile = new File(writeFileName);
 			if (!wfile.exists()) {
 				break;
