@@ -1,4 +1,3 @@
-import java.math.BigInteger;
 import java.util.Random;
 
 public class Phenotype {
@@ -77,6 +76,6 @@ public class Phenotype {
 	}
 
 	int sign(double a) {
-		return BigInteger.valueOf((int)a).signum();
+		return (int)(a / Math.abs(a));
 	}
 }
